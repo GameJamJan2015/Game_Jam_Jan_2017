@@ -12,7 +12,7 @@ public class DecorationEditor : Editor {
     {
         base.OnInspectorGUI();
         decoration = target as SplineDecorator;
-        //EditorGUI.BeginChangeCheck();
+        EditorGUI.BeginChangeCheck();
         if (GUILayout.Button("Generate spline"))
         {
             Undo.RecordObject(decoration, "Generate spline");
