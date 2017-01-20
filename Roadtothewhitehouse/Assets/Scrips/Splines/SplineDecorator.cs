@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class SplineDecorator : MonoBehaviour {
 
@@ -6,11 +7,24 @@ public class SplineDecorator : MonoBehaviour {
 
 	public int frequency;
 
-	public bool lookForward;
+    public bool lookForward;
 
 	public Transform[] items;
 
-	private void Awake () {
+    private List<Transform> objectList = new List<Transform>();
+
+
+    public void RemoveAll()
+    {
+        foreach(Transform t in objectList)
+        {
+            if(t != null)
+                DestroyImmediate(t.gameObject);
+        }
+        objectList.Clear();
+    }
+
+	public void GenerateCurve () {
 		if (frequency <= 0 || items == null || items.Length == 0) {
 			return;
 		}
@@ -30,7 +44,8 @@ public class SplineDecorator : MonoBehaviour {
 					item.transform.LookAt(position + spline.GetDirection(p * stepSize));
 				}
 				item.transform.parent = transform;
-			}
+                objectList.Add(item);
+            }
 		}
 	}
 }
