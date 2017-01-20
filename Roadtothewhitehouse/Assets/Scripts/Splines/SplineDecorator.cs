@@ -5,47 +5,48 @@ public class SplineDecorator : MonoBehaviour {
 
 	public BezierSpline spline;
 
-	public int frequency;
+	public Transform splineObject;
 
-    public bool lookForward;
+    public float distance = 0.4f;
 
-	public Transform[] items;
+    private float currentStep;
 
     private List<Transform> objectList = new List<Transform>();
 
 
     public void RemoveAll()
     {
-        foreach(Transform t in objectList)
+        int amount = transform.childCount;
+        for (int i = 0; i < amount; i++)
         {
-            if(t != null)
-                DestroyImmediate(t.gameObject);
+            if(transform.GetChild(0) != null)
+                DestroyImmediate(transform.GetChild(0).gameObject);
         }
         objectList.Clear();
     }
 
 	public void GenerateCurve () {
-		if (frequency <= 0 || items == null || items.Length == 0) {
+		if (splineObject == null) {
 			return;
 		}
-		float stepSize = frequency * items.Length;
-		if (spline.Loop || stepSize == 1) {
-			stepSize = 1f / stepSize;
-		}
-		else {
-			stepSize = 1f / (stepSize - 1);
-		}
-		for (int p = 0, f = 0; f < frequency; f++) {
-			for (int i = 0; i < items.Length; i++, p++) {
-				Transform item = Instantiate(items[i]) as Transform;
-				Vector3 position = spline.GetPoint(p * stepSize);
-				item.transform.localPosition = position;
-				if (lookForward) {
-					item.transform.LookAt(position + spline.GetDirection(p * stepSize));
-				}
-				item.transform.parent = transform;
-                objectList.Add(item);
+
+        float stepSize = 0.0005f;
+        currentStep = 0;
+        while (currentStep < 1f)
+        {
+            currentStep += stepSize;
+            if (objectList.Count > 0)
+            {
+                if (Vector3.Distance(objectList[objectList.Count - 1].position, spline.GetPoint(currentStep)) < distance)
+                    continue;
             }
-		}
-	}
+
+            Transform item = Instantiate(splineObject) as Transform;
+            Vector3 position = spline.GetPoint(currentStep);
+            item.transform.localPosition = position;
+            item.transform.LookAt(position + spline.GetDirection(currentStep));
+            item.transform.parent = transform;
+            objectList.Add(item);
+        }
+    }
 }
