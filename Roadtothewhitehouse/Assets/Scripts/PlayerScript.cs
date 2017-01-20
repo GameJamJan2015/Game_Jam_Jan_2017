@@ -23,14 +23,37 @@ public class PlayerScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        UpdateMovementPath();
+        UpdatePathFinding();
+        UpdateJump();
+        UpdateMovemet();
     }
 
-    private void UpdateMovementPath()
+    private void UpdateMovemet()
     {
-        // Force
-        RigidBody.AddForce(transform.forward * 100);
+        //if (!IsGrounded)
+        {
+            Quaternion deltaRotation = Quaternion.Euler(new Vector3(360, 0, 0) * Time.deltaTime);
 
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                RigidBody.AddTorque(new Vector3(10000, 0, 0), ForceMode.VelocityChange);
+               // RigidBody.MoveRotation(deltaRotation* transform.localRotation );
+            }
+            else if (Input.GetKey(KeyCode.RightArrow))
+            {
+                RigidBody.MoveRotation(RigidBody.rotation * deltaRotation);
+            }
+        }
+    }
+
+    private void UpdateJump()
+    {
+        if (IsGrounded && Input.GetKey(KeyCode.Space))
+            RigidBody.AddForce(transform.up * 500);
+    }
+
+    private void UpdatePathFinding()
+    {
         // Keep around head
         Vector3 dir = Vector3.down;
         float length = 100;
@@ -38,15 +61,28 @@ public class PlayerScript : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, dir, out hit, length))
         {
-            var dest = DistanceToLine(hit.collider.transform.position, hit.collider.transform.forward, transform.position - transform.up * 1);
+            var fakeForward = hit.collider.transform.forward;
+            fakeForward.y = 0;
+
+            var fakePos = transform.position;
+            fakePos.y = 0;
+
+            var dest = DistanceToLine(hit.collider.transform.position, fakeForward, fakePos);
             dest.y = transform.position.y;
 
-            RigidBody.MovePosition(Vector3.MoveTowards(RigidBody.position, dest, .05f));
+            RigidBody.MovePosition(Vector3.MoveTowards(RigidBody.position, dest, .5f));
 
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(hit.collider.transform.forward), Time.fixedDeltaTime * 4);
+
+
+            var lookAt = hit.collider.transform.forward;
+            lookAt.y = 0;
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookAt), Time.fixedDeltaTime * 10);
 
             IsGrounded = hit.distance < 1;
         }
+
+        // Force
+        RigidBody.AddForce(transform.forward * 80);
     }
 
     public Vector3 DistanceToLine(Vector3 origin, Vector3 dir, Vector3 point)
@@ -54,10 +90,4 @@ public class PlayerScript : MonoBehaviour
         return UnityEditor.HandleUtility.ProjectPointLine(point, origin - dir * 100, origin + dir * 100);
     }
 
-    private Vector3 GetDistPointToLine(Vector3 origin, Vector3 direction, Vector3 point)
-    {
-        Vector3 point2origin = origin - point;
-        Vector3 point2closestPointOnLine = point2origin - Vector3.Dot(point2origin, direction) * direction;
-        return point2closestPointOnLine;
-    }
 }
