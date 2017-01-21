@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4201618484830474}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: trump
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ GameObject:
   - component: {fileID: 4411491714159042}
   - component: {fileID: 33099216263073260}
   - component: {fileID: 23885573495603802}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50,8 +50,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1141711530966182}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 45.148804, y: 14.591543, z: -8.636999}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: -11.274, z: -4.5}
+  m_LocalScale: {x: 0.79935503, y: 0.79935503, z: 0.79935503}
   m_Children:
   - {fileID: 4411491714159042}
   m_Father: {fileID: 0}
