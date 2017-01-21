@@ -36,10 +36,12 @@ public class PlayerScript : MonoBehaviour
         this.transform.rotation = SpawnTransform.rotation;
         this.RigidBody.velocity = Vector3.zero;
         this.RigidBody.angularVelocity = Vector3.zero;
-        this.MinSpeed = 0.5f;
+        this.MinSpeed = 0.05f;
 
         lastPathPosition = SpawnTransform.position - transform.forward * 1;
         currentDir = transform.forward;
+
+        RigidBody.AddForce(currentDir * 10, ForceMode.VelocityChange);
     }
 
     // Update is called once per frame
@@ -87,25 +89,25 @@ public class PlayerScript : MonoBehaviour
             Kill();
         }
 
-        if (!IsGrounded && 1 == 0)
+        if (!IsGrounded)
         {
             if (Input.GetButton("RotateLeft"))
             {
                 //Quaternion deltaRotation = Quaternion.Euler(new Vector3(-180, 0, 0));
                 // RigidBody.AddRelativeTorque(new Vector3(-10000, 0, 0), ForceMode.VelocityChange);
                 //RigidBody.MoveRotation(Quaternion.Slerp(RigidBody.rotation, RigidBody.rotation * deltaRotation, Time.deltaTime * 270));
-                //  transform.Rotate(-10, 0, 0, Space.Self);
-
+                  transform.Rotate(-10, 0, 0, Space.Self);
+                //RigidBody.AddRelativeTorque(new Vector3(-5000, 0, 0), ForceMode.VelocityChange);
             }
             else if (Input.GetButton("RotateRight"))
             {
-                //transform.Rotate(10, 0, 0, Space.Self);
+              //  transform.Rotate(10, 0, 0, Space.Self);
 
-                //transform.rotation *= Quaternion.Euler(new Vector3(10, 0, 0)); 
+                transform.rotation *= Quaternion.Euler(new Vector3(10, 0, 0)); 
                 // Quaternion deltaRotation = Quaternion.Euler(new Vector3(180, 0, 0));
                 // RigidBody.MoveRotation(Quaternion.Slerp(RigidBody.rotation, RigidBody.rotation * deltaRotation, Time.deltaTime * 270));
                 //
-                RigidBody.AddRelativeTorque(new Vector3(5000, 0, 0), ForceMode.Impulse);
+              //  RigidBody.AddRelativeTorque(new Vector3(5000, 0, 0), ForceMode.VelocityChange);
             }
             else if (Input.GetButton("Dash"))
             {
@@ -113,16 +115,16 @@ public class PlayerScript : MonoBehaviour
             }
 
 
-            var lookAt = currentDir;
-            lookAt.y = 0;
-            var newY = Quaternion.LookRotation(lookAt).eulerAngles.y;
-            RigidBody.MoveRotation(Quaternion.Slerp(transform.rotation,
-                  Quaternion.Euler(RigidBody.rotation.eulerAngles.x, newY, RigidBody.rotation.eulerAngles.z), Time.deltaTime * 100));
+            //var lookAt = currentDir;
+            //lookAt.y = 0;
+            //var newY = Quaternion.LookRotation(lookAt).eulerAngles.y;
+            //transform.localRotation = (Quaternion.Slerp(transform.rotation,
+            //      Quaternion.Euler(transform.localRotation.eulerAngles.x, newY, transform.localRotation.eulerAngles.z), Time.deltaTime * 100));
         }
         else
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation,
-                        Quaternion.LookRotation(currentDir), Time.deltaTime * 10);
+          //  transform.rotation = Quaternion.Slerp(transform.rotation,
+            //            Quaternion.LookRotation(currentDir), Time.deltaTime * 15);
         }
 
         //print(IsGrounded);
@@ -132,7 +134,7 @@ public class PlayerScript : MonoBehaviour
     {
         if (IsGrounded && Input.GetButtonDown("Jump"))
         {
-            RigidBody.AddForce(transform.up * 8000);
+            RigidBody.AddForce(transform.up * 800);
         }
     }
 
@@ -197,6 +199,8 @@ public class PlayerScript : MonoBehaviour
                         currentPathPosition = averagePos;
                         currentDir = fakeForward;
                     }
+
+                    fakeForward = currentDir;
                     fakeForward.y = 0;
 
                     var fakePos = transform.position;
@@ -206,6 +210,7 @@ public class PlayerScript : MonoBehaviour
                     dest.y = transform.position.y;
 
                     RigidBody.MovePosition(Vector3.MoveTowards(RigidBody.position, dest, 1f));
+                   // transform.position = Vector3.MoveTowards(RigidBody.position, dest, 5f);
                 }
             }
             IsGrounded = hit.distance < 1.2f;
