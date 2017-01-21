@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Roadtothewhitehouse/Assets/Sound/Music.meta
+guid: d1c4aa966f56c344e95b3f36097e8fd8
+folderAsset: yes
+timeCreated: 1484995069
+=======
 guid: 607883ceaa2cbc540bf19edec701067f
 folderAsset: yes
 timeCreated: 1484992850
+>>>>>>> 402ea0787a98b0edac6f56c35fd8a973bcd78604:Roadtothewhitehouse/Assets/Sound/Music.meta
 licenseType: Free
 DefaultImporter:
   userData: 
