@@ -22,7 +22,7 @@ public class Money : MonoBehaviour {
 
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider collision)
     {
         mr.enabled = false;
         bc.enabled = false;
