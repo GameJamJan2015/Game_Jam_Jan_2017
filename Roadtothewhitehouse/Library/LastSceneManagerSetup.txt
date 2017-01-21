@@ -1,4 +1,8 @@
 sceneSetups:
-- path: Assets/Levels/Simme2.unity
+<<<<<<< HEAD
+- path: Assets/Levels/Tommymainmenu.unity
+=======
+- path: Assets/Levels/Main.unity
+>>>>>>> b4ca22afc53bc7c56115f452aec3c72638583e9c
   isLoaded: 1
   isActive: 1
