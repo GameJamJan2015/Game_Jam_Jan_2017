@@ -68,6 +68,11 @@ public class PlayerScript : MonoBehaviour
 
     private void UpdateMovemet()
     {
+        if (transform.position.y < -10)
+        {
+            OnDeath();
+        }
+
         if (!IsGrounded)
         {
             if (Input.GetKey(KeyCode.LeftArrow))
@@ -84,6 +89,13 @@ public class PlayerScript : MonoBehaviour
                 //RigidBody.AddRelativeTorque(new Vector3(10000, 0, 0), ForceMode.VelocityChange);
             }
         }
+    }
+
+    struct TriangleShit
+    {
+       public Vector3 dir;
+        public Vector3 pos1;
+        public Vector3 pos2;
     }
 
     private void UpdateJump()
@@ -131,89 +143,54 @@ public class PlayerScript : MonoBehaviour
             MeshCollider meshCollider = hit.collider as MeshCollider;
             if (meshCollider != null && meshCollider.sharedMesh != null)
             {
-
-                int[] triangles = meshCollider.sharedMesh.triangles;
-                Vector3[] vertices = meshCollider.sharedMesh.vertices;
-
-                Vector3 p0 = vertices[triangles[hit.triangleIndex * 3 + 0]];
-                Vector3 p1 = vertices[triangles[hit.triangleIndex * 3 + 1]];
-                Vector3 p2 = vertices[triangles[hit.triangleIndex * 3 + 2]];
-
-
-                Vector3[] lol = new Vector3[] { p0 - p1, p2 - p0, p2 - p1 };
-                lol.OrderBy(x => x.magnitude);
-
-                Vector3 averagePos;
-
-                if (Vector3.Dot(lol[0], lol[1]) == 0)
+                var decorator = hit.collider.GetComponent<SplineDecorator>();
+                if (decorator != null)
                 {
-                    if (lol[0].magnitude > lol[1].magnitude)
+                    int[] triangles = meshCollider.sharedMesh.triangles;
+                    Vector3[] vertices = meshCollider.sharedMesh.vertices;
+
+                    Vector3 p0 = vertices[triangles[hit.triangleIndex * 3 + 0]];
+                    Vector3 p1 = vertices[triangles[hit.triangleIndex * 3 + 1]];
+                    Vector3 p2 = vertices[triangles[hit.triangleIndex * 3 + 2]];
+
+
+                    //TriangleShit[] lol = new TriangleShit[] { new TriangleShit() { dir = p0 - p1, pos1 = p0, pos2 = p1 }
+                    //, new TriangleShit() { dir = p2 - p0, pos1 = p2, pos2 = p0 },
+                    //    new TriangleShit() { dir = p2 - p1, pos1 = p2, pos2 = p1 } };
+
+                    //var test = lol.OrderBy(x => x.dir.magnitude).ToArray()[1];
+
+
+                    var averagePos =  (p0 + p1 + p2) / 3f;
+
+                    var fakeForward = (averagePos - lastPathPosition).normalized;
+                    fakeForward.y = 0;
+
+                    //if (fakeForward == Vector3.zero)
+                    //{
+                    //    fakeForward = lastDir;
+                    //    fakeForward.y = 0;
+                    //}
+
+                    var fakePos = transform.position;
+                    fakePos.y = 0;
+
+                    var dest = DistanceToLine(averagePos, fakeForward, fakePos);
+                    dest.y = transform.position.y;
+
+
+                    if (currentPathPosition != averagePos)
                     {
-                        averagePos = Vector3.Lerp(p0, p1, 0.5f);
-                    } else
-                    {
-                        averagePos = Vector3.Lerp(p0, p2, 0.5f);
+                        lastPathPosition = currentPathPosition;
+                        currentPathPosition = averagePos;
                     }
+
+                    Debug.DrawRay(averagePos, -fakeForward);
+
+                    print(averagePos);
+
+                    RigidBody.MovePosition(Vector3.MoveTowards(RigidBody.position, dest, .5f));
                 }
-                else if (Vector3.Dot(lol[1], lol[2]) == 0)
-                {
-                    if (lol[1].magnitude > lol[2].magnitude)
-                    {
-                        averagePos = Vector3.Lerp(p0, p2, 0.5f);
-                    }
-                    else
-                    {
-                        averagePos = Vector3.Lerp(p1, p2, 0.5f);
-                    }
-                }
-                else
-                {
-                    if (lol[0].magnitude > lol[2].magnitude)
-                    {
-                        averagePos = Vector3.Lerp(p0, p1, 0.5f);
-                    }
-                    else
-                    {
-                        averagePos = Vector3.Lerp(p1, p2, 0.5f);
-                    }
-                }
-
-
-                //var averagePos =  (p0 + p1 + p2) / 3f;
-
-                var fakeForward = (averagePos - lastPathPosition).normalized;
-                fakeForward.y = 0;
-
-                //if (fakeForward == Vector3.zero)
-                //{
-                //    fakeForward = lastDir;
-                //    fakeForward.y = 0;
-                //}
-
-
-                var fakePos = transform.position;
-                fakePos.y = 0;
-
-                var dest = DistanceToLine(averagePos, fakeForward, fakePos);
-                dest.y = transform.position.y;
-
-
-                if (currentPathPosition != averagePos)
-                {
-                    lastPathPosition = currentPathPosition;
-                    currentPathPosition = averagePos;
-                }
-
-                Debug.DrawRay(averagePos, -fakeForward);
-
-                // if (lastPathPosition != dest)
-                //     lastPathPosition = dest;
-
-                //   lastDir = (averagePos - dest).normalized;
-
-                print(fakeForward);
-
-                RigidBody.MovePosition(Vector3.MoveTowards(RigidBody.position, dest, .5f));
             }
 
 
