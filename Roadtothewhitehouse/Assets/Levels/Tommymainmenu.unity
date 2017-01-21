@@ -210,8 +210,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: fff9f5404bbccad4596e8f64b834b2f0, type: 3}
   - {fileID: 8300000, guid: ff28c388ffb998c4b8addf4b65c29fc3, type: 3}
   - {fileID: 8300000, guid: 7e0d51a6e622ecf4ab236173a37fa6e5, type: 3}
+  - {fileID: 8300000, guid: c93234ed56ba1314ab79f25e53c34301, type: 3}
+  - {fileID: 8300000, guid: 1c08a2b1c79b5304087457203c446c2e, type: 3}
+  - {fileID: 8300000, guid: b7e777ef65f748a4c9302fd0bab31b2f, type: 3}
   deathreactions:
   - {fileID: 8300000, guid: 68d8246913955054c8d131abf18c0e24, type: 3}
+  - {fileID: 8300000, guid: 8b65e9557ca232d40a69c756f28deb8e, type: 3}
+  - {fileID: 8300000, guid: 2a8b32736a42687439c644cdb8c811e9, type: 3}
   pickupPoints:
   - {fileID: 8300000, guid: cfa49399efc8f954780d9ebec5959893, type: 3}
   - {fileID: 8300000, guid: 8b599fec4ef4b8f46a14c1c89082122a, type: 3}
