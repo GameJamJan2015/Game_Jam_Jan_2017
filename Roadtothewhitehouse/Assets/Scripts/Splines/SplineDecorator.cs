@@ -5,9 +5,11 @@ public class SplineDecorator : MonoBehaviour {
 
 	public BezierSpline spline;
 
-	public Transform splineObject;
-
     public float distance = 0.4f;
+
+    public float thickness = 0.5f;
+
+    public float width = 0.5f;
 
     private float currentStep;
 
@@ -16,7 +18,6 @@ public class SplineDecorator : MonoBehaviour {
     Mesh mesh;
 
     List<Vector3> newVertices = new List<Vector3>();
-    List<Vector2> newUV = new List<Vector2>();
     List<int> newTriangles = new List<int>();
 
     public void RemoveAll()
@@ -24,53 +25,54 @@ public class SplineDecorator : MonoBehaviour {
 
         mesh = GetComponent<MeshFilter>().sharedMesh;
 
-        newVertices.Clear();
         newTriangles.Clear();
-        newUV.Clear();
+        newVertices.Clear();
 
-        mesh.vertices = newVertices.ToArray();
-        mesh.uv = newUV.ToArray();
-        mesh.triangles = newTriangles.ToArray();
+        if (mesh != null)
+        {
+            mesh.Clear();
+            GetComponent<MeshFilter>().sharedMesh = null;
+            GetComponent<MeshCollider>().sharedMesh = null;
+        }
 
         start = true;
-
-        //objectList.Clear();
     }
 
 	public void GenerateCurve () {
-		if (splineObject == null) {
-			return;
-		}
-        mesh = GetComponent<MeshFilter>().sharedMesh;
-        mesh.Clear();
+
+        RemoveAll();
+        mesh = new Mesh();
+        mesh.name = "CUSTOM SPLINE";
 
         float stepSize = 0.0005f;
         currentStep = 0;
         while (currentStep < 1f)
         {
             currentStep += stepSize;
+            Vector3 position = spline.GetPoint(currentStep);
+            Vector3 direction = spline.GetDirection(currentStep);
             if (!start)
             {
                 Vector3 cross = Vector3.Cross(spline.GetDirection(currentStep), Vector3.up).normalized;
-                if (Vector3.Distance(newVertices[newVertices.Count - 1], spline.GetPoint(currentStep) + (cross * -2f)) < distance)
+                if (Vector3.Distance(newVertices[newVertices.Count - 3], position + (cross * -width)) < distance)
                     continue;
             }
             else
             {
-                createTriangle(true, spline.GetPoint(currentStep), spline.GetDirection(currentStep));
+                createTriangle(true, position, direction);
                 start = false;
                 continue;
             }
 
-            Vector3 position = spline.GetPoint(currentStep);
-            Vector3 direction = spline.GetDirection(currentStep);
             createTriangle(false, position, direction);
         }
+        createTriangle(false, spline.GetPoint(stepSize), spline.GetDirection(stepSize));
 
         mesh.vertices = newVertices.ToArray();
-        mesh.uv = newUV.ToArray();
         mesh.triangles = newTriangles.ToArray();
+        mesh.RecalculateNormals();
 
+        GetComponent<MeshFilter>().sharedMesh = mesh;
         GetComponent<MeshCollider>().sharedMesh = mesh;
     }
 
@@ -79,21 +81,59 @@ public class SplineDecorator : MonoBehaviour {
         Vector3 cross = Vector3.Cross(direction, Vector3.up).normalized;
         if(first)
         {
-            newVertices.Add(currentPos + (cross * 2f));
-            newVertices.Add(currentPos + (cross * -2f));
+            newVertices.Add(currentPos + (cross * width)); //8
+            newVertices.Add(currentPos + (cross * -width)); //7
+
+            newVertices.Add(currentPos + (cross * width) + (Vector3.down * thickness)); //6
+            newVertices.Add(currentPos + (cross * -width) + (Vector3.down * thickness)); //5
         }
         else
         {
-            newVertices.Add(currentPos + (cross * 2f));
-            newVertices.Add(currentPos + (cross * -2f));
+            newVertices.Add(currentPos + (cross * width)); //4
+            newVertices.Add(currentPos + (cross * -width)); //3
 
-            newTriangles.Add(newVertices.Count - 1);
+            newVertices.Add(currentPos + (cross * width) + (Vector3.down * thickness)); // 2
+            newVertices.Add(currentPos + (cross * -width) + (Vector3.down * thickness)); // 1
+
+            //top1
             newTriangles.Add(newVertices.Count - 3);
+            newTriangles.Add(newVertices.Count - 7);
+            newTriangles.Add(newVertices.Count - 8);
+
+            //top2
+            newTriangles.Add(newVertices.Count - 4);
+            newTriangles.Add(newVertices.Count - 3);
+            newTriangles.Add(newVertices.Count - 8);
+
+            //side1
+            newTriangles.Add(newVertices.Count - 1);
+            newTriangles.Add(newVertices.Count - 5);
+            newTriangles.Add(newVertices.Count - 3);
+
+            //side2
+            newTriangles.Add(newVertices.Count - 7);
+            newTriangles.Add(newVertices.Count - 3);
+            newTriangles.Add(newVertices.Count - 5);
+
+            //other1
+            newTriangles.Add(newVertices.Count - 2);
+            newTriangles.Add(newVertices.Count - 4);
+            newTriangles.Add(newVertices.Count - 6);
+
+            //other2
+            newTriangles.Add(newVertices.Count - 8);
+            newTriangles.Add(newVertices.Count - 6);
             newTriangles.Add(newVertices.Count - 4);
 
-            newTriangles.Add(newVertices.Count - 2);
+            //down1
             newTriangles.Add(newVertices.Count - 1);
-            newTriangles.Add(newVertices.Count - 4);
+            newTriangles.Add(newVertices.Count - 6);
+            newTriangles.Add(newVertices.Count - 5);
+
+            //down2
+            newTriangles.Add(newVertices.Count - 2);
+            newTriangles.Add(newVertices.Count - 6);
+            newTriangles.Add(newVertices.Count - 1);
         }
     }
 }

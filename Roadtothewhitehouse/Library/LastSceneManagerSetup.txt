@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Levels/Simons.unity
+- path: Assets/Levels/Tommymainmenu.unity
   isLoaded: 1
   isActive: 1
