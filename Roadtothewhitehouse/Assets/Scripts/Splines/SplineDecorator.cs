@@ -15,6 +15,8 @@ public class SplineDecorator : MonoBehaviour {
 
     private bool start = true;
 
+    public bool loop = true;
+
     Mesh mesh;
 
     List<Vector3> newVertices = new List<Vector3>();
@@ -72,7 +74,8 @@ public class SplineDecorator : MonoBehaviour {
 
             CreateTriangle(false, position, direction);
         }
-        CreateTriangle(false, spline.GetPoint(stepSize), spline.GetDirection(stepSize));
+        if(loop)
+            CreateTriangle(false, spline.GetPoint(stepSize), spline.GetDirection(stepSize));
 
         mesh.vertices = newVertices.ToArray();
         mesh.triangles = newTriangles.ToArray();
