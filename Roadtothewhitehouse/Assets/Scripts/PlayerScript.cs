@@ -41,7 +41,7 @@ public class PlayerScript : MonoBehaviour
         lastPathPosition = SpawnTransform.position - transform.forward * 1;
         currentDir = transform.forward;
 
-        RigidBody.AddForce(currentDir * 10, ForceMode.VelocityChange);
+        //RigidBody.AddForce(currentDir * 1, ForceMode.VelocityChange);
     }
 
     // Update is called once per frame
@@ -65,14 +65,14 @@ public class PlayerScript : MonoBehaviour
 
     private void UpdateSpeed()
     {
-        MinSpeed += Time.deltaTime * 0.01f;
+        MinSpeed += Time.deltaTime * 0.001f;
 
         var localVel = transform.InverseTransformDirection(RigidBody.velocity);
         if (localVel.magnitude < 1)
         {
             var addVel = transform.forward;
             addVel.y = 0;
-            RigidBody.AddForce(addVel * MinSpeed, ForceMode.Impulse);
+            RigidBody.AddForce(addVel * MinSpeed, ForceMode.Acceleration);
         }
     }
 
@@ -96,7 +96,7 @@ public class PlayerScript : MonoBehaviour
                 //Quaternion deltaRotation = Quaternion.Euler(new Vector3(-180, 0, 0));
                 // RigidBody.AddRelativeTorque(new Vector3(-10000, 0, 0), ForceMode.VelocityChange);
                 //RigidBody.MoveRotation(Quaternion.Slerp(RigidBody.rotation, RigidBody.rotation * deltaRotation, Time.deltaTime * 270));
-                  transform.Rotate(-10, 0, 0, Space.Self);
+                transform.Rotate(-10, 0, 0, Space.Self);
                 //RigidBody.AddRelativeTorque(new Vector3(-5000, 0, 0), ForceMode.VelocityChange);
             }
             else if (Input.GetButton("RotateRight"))
@@ -123,9 +123,11 @@ public class PlayerScript : MonoBehaviour
         }
         else
         {
-          //  transform.rotation = Quaternion.Slerp(transform.rotation,
-            //            Quaternion.LookRotation(currentDir), Time.deltaTime * 15);
+            //transform.rotation = Quaternion.Slerp(transform.rotation,
+            //            Quaternion.LookRotation(currentDir), Time.deltaTime * 20);
         }
+        transform.rotation = Quaternion.Slerp(transform.rotation,
+            Quaternion.LookRotation(currentDir), 1f);
 
         //print(IsGrounded);
     }
@@ -134,7 +136,7 @@ public class PlayerScript : MonoBehaviour
     {
         if (IsGrounded && Input.GetButtonDown("Jump"))
         {
-            RigidBody.AddForce(transform.up * 800);
+            RigidBody.AddForce(Vector3.up * 800);
         }
     }
 
@@ -185,7 +187,8 @@ public class PlayerScript : MonoBehaviour
                     var averagePos = decorator.GetCenterFromVertexIndex(triangles[hit.triangleIndex * 3 + 0]);
 
                     var fakeForward = (averagePos - lastPathPosition).normalized;
-                  
+                   
+
                     if ( Vector3.Dot(currentDir, (fakeForward)) < 0)
                     {
                         fakeForward = -fakeForward;
@@ -203,14 +206,23 @@ public class PlayerScript : MonoBehaviour
                     fakeForward = currentDir;
                     fakeForward.y = 0;
 
+
+
+
+
                     var fakePos = transform.position;
-                    fakePos.y = 0;
+                    fakePos.y = averagePos.y;
+
 
                     var dest = DistanceToLine(averagePos, fakeForward.normalized, fakePos);
                     dest.y = transform.position.y;
 
-                    RigidBody.MovePosition(Vector3.MoveTowards(RigidBody.position, dest, 1f));
-                   // transform.position = Vector3.MoveTowards(RigidBody.position, dest, 5f);
+                    RigidBody.MovePosition(new Vector3(dest.x, transform.position.y, dest.z));
+
+                    Debug.Log(dest + " | " + transform.position);
+                    Debug.DrawLine(fakePos, transform.position, Color.yellow);
+                  //  Debug.DrawRay(transform.position, (transform.position - dest).normalized * 4f, Color.red, 0f);
+                    // transform.position = Vector3.MoveTowards(RigidBody.position, dest, 5f);
                 }
             }
             IsGrounded = hit.distance < 1.2f;
