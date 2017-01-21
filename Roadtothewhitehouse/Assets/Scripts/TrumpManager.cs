@@ -71,6 +71,11 @@ public class TrumpManager : MonoBehaviour
 
     }
 
+    public void AddMoney(int money)
+    {
+        this.Money += money;
+    }
+
     private void UpdateMoney()
     {
         Money += (int)(Time.deltaTime * 100);
