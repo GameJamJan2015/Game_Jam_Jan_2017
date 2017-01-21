@@ -70,7 +70,7 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    private void OnDeath()
+    public void Kill()
     {
         this.RigidBody.isKinematic = true;
         Manager.OnDeath();
@@ -80,7 +80,7 @@ public class PlayerScript : MonoBehaviour
     {
         if (transform.position.y < -60)
         {
-            OnDeath();
+            Kill();
         }
 
         if (!IsGrounded)
@@ -115,10 +115,10 @@ public class PlayerScript : MonoBehaviour
         else
         {
             transform.rotation = Quaternion.Slerp(transform.rotation,
-                        Quaternion.LookRotation(currentDir), Time.deltaTime * 100);
+                        Quaternion.LookRotation(currentDir), Time.deltaTime * 1);
         }
 
-        print(IsGrounded);
+        //print(IsGrounded);
     }
 
     private void UpdateJump()
@@ -212,7 +212,7 @@ public class PlayerScript : MonoBehaviour
     {
         if (collision.contacts[0].thisCollider.GetType() == typeof(BoxCollider))
         {
-            OnDeath();
+            Kill();
         }
     }
 
