@@ -34,7 +34,7 @@ public class CameraScript : MonoBehaviour
             transform.position = Vector3.Lerp(transform.position, 
                 (zoom * (Player.transform.position - centerTrump.position).normalized) + Player.transform.position, Time.deltaTime * 13);
         }
-        else if (Manager.State == TrumpManager.GameState.MENU)
+        else //if (Manager.State == TrumpManager.GameState.MENU)
         {
             transform.position = Vector3.Lerp(transform.position, TitleTransform.position, Time.deltaTime);
             transform.rotation = Quaternion.Slerp(transform.rotation, TitleTransform.rotation, Time.deltaTime);

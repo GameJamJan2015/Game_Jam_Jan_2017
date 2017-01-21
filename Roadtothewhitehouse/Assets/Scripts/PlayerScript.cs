@@ -85,14 +85,14 @@ public class PlayerScript : MonoBehaviour
 
         if (!IsGrounded)
         {
-            if (Input.GetKey(KeyCode.LeftArrow))
+            if (Input.GetButton("RotateLeft"))
             {
                 //Quaternion deltaRotation = Quaternion.Euler(new Vector3(-180, 0, 0));
                 // RigidBody.AddRelativeTorque(new Vector3(-10000, 0, 0), ForceMode.VelocityChange);
                 //RigidBody.MoveRotation(Quaternion.Slerp(RigidBody.rotation, RigidBody.rotation * deltaRotation, Time.deltaTime * 270));
                 transform.Rotate(-10, 0, 0, Space.Self);
             }
-            else if (Input.GetKey(KeyCode.RightArrow))
+            else if (Input.GetButton("RotateRight"))
             {
                 transform.Rotate(10, 0, 0, Space.Self);
                 // Quaternion deltaRotation = Quaternion.Euler(new Vector3(180, 0, 0));
@@ -100,7 +100,7 @@ public class PlayerScript : MonoBehaviour
                 //
                 //RigidBody.AddRelativeTorque(new Vector3(10000, 0, 0), ForceMode.VelocityChange);
             }
-            else if (Input.GetKey(KeyCode.DownArrow))
+            else if (Input.GetButton("Dash"))
             {
                 RigidBody.AddForce(transform.up * -800 * Time.deltaTime, ForceMode.Impulse);
             }
@@ -123,9 +123,9 @@ public class PlayerScript : MonoBehaviour
 
     private void UpdateJump()
     {
-        if (IsGrounded && Input.GetKey(KeyCode.Space))
+        if (IsGrounded && Input.GetButtonUp("Jump"))
         {
-            RigidBody.AddForce(transform.up * 800);
+            RigidBody.AddForce(transform.up * 8000);
         }
     }
 

@@ -36,7 +36,7 @@ public class moveImage : MonoBehaviour {
 
             rawimage.transform.localScale = new Vector3(rawimagescale.x + Mathf.Sin(time * speed) * amount, rawimagescale.y + Mathf.Sin(time * speed) * amount, rawimagescale.z);
 
-            rawimage.transform.position = Vector3.Lerp(rawimage.transform.position, new Vector3(Screen.width / 2f, Screen.height / 2f, 0), Time.deltaTime * 0.7f);
+            rawimage.transform.position = Vector3.Lerp(rawimage.transform.position, new Vector3(Screen.width / 2f, Screen.height * 0.6f, 0), Time.deltaTime * 0.7f);
             rawimage.transform.rotation = Quaternion.Slerp(rawimage.transform.rotation, Quaternion.identity, Time.deltaTime);
         }
     }

@@ -44,7 +44,7 @@ public class TrumpManager : MonoBehaviour
     {
         if (State == GameState.MENU)
         {
-            if (Input.GetKeyUp(KeyCode.Space))
+            if (Input.GetButtonUp("Jump"))
             {
                 this.State = GameState.GAME;
                 this.TitleUI.enabled = false;
@@ -60,7 +60,7 @@ public class TrumpManager : MonoBehaviour
         }
         else if (State == GameState.GAMEOVER)
         {
-            if (Input.GetKeyUp(KeyCode.Space))
+            if (Input.GetButtonUp("Jump"))
             {
                 this.State = GameState.MENU;
                 this.GameOverUI.GetComponent<moveImage>().deactivate();
