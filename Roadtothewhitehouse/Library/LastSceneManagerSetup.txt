@@ -1,8 +1,4 @@
 sceneSetups:
-<<<<<<< HEAD
 - path: Assets/Levels/Main.unity
-=======
-- path: Assets/Levels/Simme2.unity
->>>>>>> 3b73c3f75612e836136e19bedc94ab35ac4f8d17
   isLoaded: 1
   isActive: 1
