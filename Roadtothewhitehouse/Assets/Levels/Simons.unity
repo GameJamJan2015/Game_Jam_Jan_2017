@@ -4573,14 +4573,6 @@ Prefab:
       propertyPath: TitleTransform
       value: 
       objectReference: {fileID: 2035032605}
-    - target: {fileID: 4637260535293486, guid: 7417aca89807cf54eb93dfeeac53ea22, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 3.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 4637260535293486, guid: 7417aca89807cf54eb93dfeeac53ea22, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -0.973
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7417aca89807cf54eb93dfeeac53ea22, type: 2}
   m_IsPrefabParent: 0
