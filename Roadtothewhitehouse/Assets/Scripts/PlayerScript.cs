@@ -24,11 +24,13 @@ public class PlayerScript : MonoBehaviour
     void Start()
     {
         this.RigidBody = GetComponent<Rigidbody>();
+        this.RigidBody.isKinematic = true;
         this.IsDead = true;
     }
 
     public void Spawn()
     {
+        this.RigidBody.isKinematic = false;
         this.IsDead = false;
         this.transform.position = SpawnTransform.position;
         this.transform.rotation = SpawnTransform.rotation;
@@ -36,7 +38,7 @@ public class PlayerScript : MonoBehaviour
         this.RigidBody.angularVelocity = Vector3.zero;
         this.MinSpeed = 1.3f;
 
-        lastPathPosition = SpawnTransform.position;
+        lastPathPosition = SpawnTransform.position - transform.forward * 2;
     }
 
     // Update is called once per frame
@@ -57,17 +59,26 @@ public class PlayerScript : MonoBehaviour
 
     private void UpdateSpeed()
     {
-        MinSpeed += Time.deltaTime * 0.001f;
+        MinSpeed += Time.deltaTime * 0.01f;
+
+        var localVel = transform.InverseTransformDirection(RigidBody.velocity);
+        if (localVel.magnitude < 1)
+        {
+            var addVel = transform.forward;
+            addVel.y = 0;
+            RigidBody.AddForce(addVel * MinSpeed, ForceMode.Impulse);
+        }
     }
 
     private void OnDeath()
     {
+        this.RigidBody.isKinematic = true;
         Manager.OnDeath();
     }
 
     private void UpdateMovemet()
     {
-        if (transform.position.y < -10)
+        if (transform.position.y < -60)
         {
             OnDeath();
         }
@@ -90,17 +101,12 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    struct TriangleShit
-    {
-       public Vector3 dir;
-        public Vector3 pos1;
-        public Vector3 pos2;
-    }
-
     private void UpdateJump()
     {
         if (IsGrounded && Input.GetKey(KeyCode.Space))
-            RigidBody.AddForce(transform.up * 500);
+        {
+            RigidBody.AddForce(transform.up * 800);
+        }
     }
 
     private Vector3 currentPathPosition;
@@ -109,7 +115,7 @@ public class PlayerScript : MonoBehaviour
     {
         // Keep around head
         Vector3 dir = Vector3.down;
-        float length = 100;
+        float length = 1000;
 
         //RaycastHit hit;
         //if (Physics.Raycast(transform.position, dir, out hit, length))
@@ -145,30 +151,11 @@ public class PlayerScript : MonoBehaviour
                 if (decorator != null)
                 {
                     int[] triangles = meshCollider.sharedMesh.triangles;
-                    Vector3[] vertices = meshCollider.sharedMesh.vertices;
 
-                    Vector3 p0 = vertices[triangles[hit.triangleIndex * 3 + 0]];
-                    Vector3 p1 = vertices[triangles[hit.triangleIndex * 3 + 1]];
-                    Vector3 p2 = vertices[triangles[hit.triangleIndex * 3 + 2]];
-
-                    
-                    //TriangleShit[] lol = new TriangleShit[] { new TriangleShit() { dir = p0 - p1, pos1 = p0, pos2 = p1 }
-                    //, new TriangleShit() { dir = p2 - p0, pos1 = p2, pos2 = p0 },
-                    //    new TriangleShit() { dir = p2 - p1, pos1 = p2, pos2 = p1 } };
-
-                    //var test = lol.OrderBy(x => x.dir.magnitude).ToArray()[1];
-
-
-                    var averagePos =  decorator.GetCenterFromVertexIndex(triangles[hit.triangleIndex * 3 + 0]);
+                    var averagePos = decorator.GetCenterFromVertexIndex(triangles[hit.triangleIndex * 3 + 0]);
 
                     var fakeForward = (averagePos - lastPathPosition).normalized;
                     fakeForward.y = 0;
-
-                    //if (fakeForward == Vector3.zero)
-                    //{
-                    //    fakeForward = lastDir;
-                    //    fakeForward.y = 0;
-                    //}
 
                     var fakePos = transform.position;
                     fakePos.y = 0;
@@ -183,26 +170,35 @@ public class PlayerScript : MonoBehaviour
                         currentPathPosition = averagePos;
                     }
 
-                    Debug.DrawRay(averagePos, -fakeForward);
+                    RigidBody.MovePosition(Vector3.MoveTowards(RigidBody.position, dest, 1f));
 
-                    print(averagePos);
+                    var lookAt = RigidBody.velocity;
+                    lookAt.y = 0;
+                    var newY = Quaternion.LookRotation(fakeForward).eulerAngles.y;
+                    transform.rotation = Quaternion.Slerp(transform.localRotation,
+                        Quaternion.Euler(transform.rotation.eulerAngles.x,newY, transform.rotation.eulerAngles.z) , Time.deltaTime * 10);
 
-                   // RigidBody.MovePosition(Vector3.MoveTowards(RigidBody.position, dest, .5f));
+                    //var lookAt = -fakeForward;
+                    //lookAt.y = 0;
+                    //RigidBody.MoveRotation(Quaternion.Slerp(transform.rotation,
+                    //    Quaternion.Euler(transform.rotation.eulerAngles.x, Quaternion.LookRotation(lookAt).eulerAngles.y, transform.rotation.eulerAngles.z),
+                    //      Time.fixedDeltaTime * 100));
+
                 }
             }
 
 
-            //var lookAt = hit.collider.transform.forward;
-            //lookAt.y = 0;
-            //RigidBody.MoveRotation(Quaternion.Slerp(transform.rotation,
-            //    Quaternion.Euler(transform.rotation.eulerAngles.x, Quaternion.LookRotation(lookAt).eulerAngles.y, transform.rotation.eulerAngles.z),
-            //      Time.fixedDeltaTime * 100));
-
             IsGrounded = hit.distance < 1;
+        }
+        else
+        {
+            IsGrounded = false;
         }
 
         // Force
-        RigidBody.AddForce(transform.forward * MinSpeed, ForceMode.Impulse);
+        var addVel = transform.forward;
+        addVel.y = 0;
+        RigidBody.AddForce(addVel * MinSpeed, ForceMode.Impulse);
     }
 
     void OnCollisionEnter(Collision collision)

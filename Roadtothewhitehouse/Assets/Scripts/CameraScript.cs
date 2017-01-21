@@ -23,8 +23,13 @@ public class CameraScript : MonoBehaviour
     {
         if (Manager.State == TrumpManager.GameState.GAME)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Player.transform.position - transform.position) , Time.deltaTime * 20);
-            transform.position = Vector3.Lerp(transform.position, Player.transform.position + Player.transform.right * 12 , Time.deltaTime);
+            float zoom = Mathf.Max( 14, Player.RigidBody.velocity.magnitude);
+
+            transform.rotation = Quaternion.Slerp(transform.rotation,
+                Quaternion.LookRotation(Player.transform.position - transform.position) , Time.deltaTime * 4);
+
+            transform.position = Vector3.Lerp(transform.position, 
+                Player.transform.position + (Vector3.Cross( Vector3.up, Player.RigidBody.velocity)).normalized * zoom , Time.deltaTime * 13);
         }
         else if (Manager.State == TrumpManager.GameState.MENU)
         {
