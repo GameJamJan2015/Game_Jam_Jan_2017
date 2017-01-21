@@ -19,6 +19,7 @@ public class SplineDecorator : MonoBehaviour {
 
     List<Vector3> newVertices = new List<Vector3>();
     List<int> newTriangles = new List<int>();
+    List<Vector3> indexPostition = new List<Vector3>();
 
     public void RemoveAll()
     {
@@ -59,14 +60,14 @@ public class SplineDecorator : MonoBehaviour {
             }
             else
             {
-                createTriangle(true, position, direction);
+                CreateTriangle(true, position, direction);
                 start = false;
                 continue;
             }
 
-            createTriangle(false, position, direction);
+            CreateTriangle(false, position, direction);
         }
-        createTriangle(false, spline.GetPoint(stepSize), spline.GetDirection(stepSize));
+        CreateTriangle(false, spline.GetPoint(stepSize), spline.GetDirection(stepSize));
 
         mesh.vertices = newVertices.ToArray();
         mesh.triangles = newTriangles.ToArray();
@@ -76,7 +77,12 @@ public class SplineDecorator : MonoBehaviour {
         GetComponent<MeshCollider>().sharedMesh = mesh;
     }
 
-    private void createTriangle(bool first, Vector3 currentPos, Vector3 direction)
+    public Vector3 GetCenterFromVertexIndex(int index)
+    {
+        return indexPostition[index];
+    }
+
+    private void CreateTriangle(bool first, Vector3 currentPos, Vector3 direction)
     {
         Vector3 cross = Vector3.Cross(direction, Vector3.up).normalized;
         if(first)
@@ -134,6 +140,11 @@ public class SplineDecorator : MonoBehaviour {
             newTriangles.Add(newVertices.Count - 2);
             newTriangles.Add(newVertices.Count - 6);
             newTriangles.Add(newVertices.Count - 1);
+        }
+
+        for(int i = 0; i < 4; i++)
+        {
+            indexPostition.Add(currentPos);
         }
     }
 }
