@@ -95,6 +95,16 @@ public class TrumpManager : MonoBehaviour
             this.GameOverUI.enabled = true;
             this.GameOverUI.GetComponent<moveImage>().activate();
             this.GameOverUI.GetComponentInChildren<Text>().text = "$" + Money;
+
+            var high = PlayerPrefs.GetInt("score", 0);
+            if (high < Money)
+            {
+                PlayerPrefs.SetInt("score", Money);
+                PlayerPrefs.Save();
+                high = Money;
+            }
+
+            GameOverUI.transform.GetChild(2).GetComponent<Text>().text = "Highscore: $" + high;
         }
     }
 }
