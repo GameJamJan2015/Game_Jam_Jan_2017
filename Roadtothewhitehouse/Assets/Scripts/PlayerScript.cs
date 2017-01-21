@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
@@ -30,10 +31,13 @@ public class PlayerScript : MonoBehaviour
     {
         this.IsDead = false;
         this.transform.position = SpawnTransform.position;
-        this.transform.rotation = SpawnTransform.transform.rotation;
+        this.transform.rotation = SpawnTransform.rotation;
         this.RigidBody.velocity = Vector3.zero;
         this.RigidBody.angularVelocity = Vector3.zero;
-        this.MinSpeed = 1.0f;
+        this.MinSpeed = 1.3f;
+
+        lastPathPosition = SpawnTransform.position;
+        lastDir = Vector3.forward;
     }
 
     // Update is called once per frame
@@ -88,32 +92,136 @@ public class PlayerScript : MonoBehaviour
             RigidBody.AddForce(transform.up * 500);
     }
 
+    private Vector3 currentPathPosition;
+    private Vector3 lastPathPosition;
+    private Vector3 lastDir;
     private void UpdatePathFinding()
     {
         // Keep around head
         Vector3 dir = Vector3.down;
         float length = 100;
 
+        //RaycastHit hit;
+        //if (Physics.Raycast(transform.position, dir, out hit, length))
+        //{
+        //    var fakeForward = hit.collider.transform.forward;
+        //    fakeForward.y = 0;
+
+        //    var fakePos = transform.position;
+        //    fakePos.y = 0;
+
+        //    var dest = DistanceToLine(hit.collider.transform.position, fakeForward, fakePos);
+        //    dest.y = transform.position.y;
+
+        //    RigidBody.MovePosition(Vector3.MoveTowards(RigidBody.position, dest, .5f));
+
+
+        //    var lookAt = hit.collider.transform.forward;
+        //    lookAt.y = 0;
+        //    RigidBody.MoveRotation( Quaternion.Slerp(transform.rotation, 
+        //        Quaternion.Euler( transform.rotation.eulerAngles.x, Quaternion.LookRotation(lookAt).eulerAngles.y, transform.rotation.eulerAngles.z),
+        //          Time.fixedDeltaTime * 100));
+
+        //    IsGrounded = hit.distance < 1;
+        //}
+
         RaycastHit hit;
         if (Physics.Raycast(transform.position, dir, out hit, length))
         {
-            var fakeForward = hit.collider.transform.forward;
-            fakeForward.y = 0;
+            MeshCollider meshCollider = hit.collider as MeshCollider;
+            if (meshCollider != null && meshCollider.sharedMesh != null)
+            {
 
-            var fakePos = transform.position;
-            fakePos.y = 0;
+                int[] triangles = meshCollider.sharedMesh.triangles;
+                Vector3[] vertices = meshCollider.sharedMesh.vertices;
 
-            var dest = DistanceToLine(hit.collider.transform.position, fakeForward, fakePos);
-            dest.y = transform.position.y;
+                Vector3 p0 = vertices[triangles[hit.triangleIndex * 3 + 0]];
+                Vector3 p1 = vertices[triangles[hit.triangleIndex * 3 + 1]];
+                Vector3 p2 = vertices[triangles[hit.triangleIndex * 3 + 2]];
 
-            RigidBody.MovePosition(Vector3.MoveTowards(RigidBody.position, dest, .5f));
+
+                Vector3[] lol = new Vector3[] { p0 - p1, p2 - p0, p2 - p1 };
+                lol.OrderBy(x => x.magnitude);
+
+                Vector3 averagePos;
+
+                if (Vector3.Dot(lol[0], lol[1]) == 0)
+                {
+                    if (lol[0].magnitude > lol[1].magnitude)
+                    {
+                        averagePos = Vector3.Lerp(p0, p1, 0.5f);
+                    } else
+                    {
+                        averagePos = Vector3.Lerp(p0, p2, 0.5f);
+                    }
+                }
+                else if (Vector3.Dot(lol[1], lol[2]) == 0)
+                {
+                    if (lol[1].magnitude > lol[2].magnitude)
+                    {
+                        averagePos = Vector3.Lerp(p0, p2, 0.5f);
+                    }
+                    else
+                    {
+                        averagePos = Vector3.Lerp(p1, p2, 0.5f);
+                    }
+                }
+                else
+                {
+                    if (lol[0].magnitude > lol[2].magnitude)
+                    {
+                        averagePos = Vector3.Lerp(p0, p1, 0.5f);
+                    }
+                    else
+                    {
+                        averagePos = Vector3.Lerp(p1, p2, 0.5f);
+                    }
+                }
 
 
-            var lookAt = hit.collider.transform.forward;
-            lookAt.y = 0;
-            RigidBody.MoveRotation( Quaternion.Slerp(transform.rotation, 
-                Quaternion.Euler( transform.rotation.eulerAngles.x, Quaternion.LookRotation(lookAt).eulerAngles.y, transform.rotation.eulerAngles.z),
-                  Time.fixedDeltaTime * 100));
+                //var averagePos =  (p0 + p1 + p2) / 3f;
+
+                var fakeForward = (averagePos - lastPathPosition).normalized;
+                fakeForward.y = 0;
+
+                //if (fakeForward == Vector3.zero)
+                //{
+                //    fakeForward = lastDir;
+                //    fakeForward.y = 0;
+                //}
+
+
+                var fakePos = transform.position;
+                fakePos.y = 0;
+
+                var dest = DistanceToLine(averagePos, fakeForward, fakePos);
+                dest.y = transform.position.y;
+
+
+                if (currentPathPosition != averagePos)
+                {
+                    lastPathPosition = currentPathPosition;
+                    currentPathPosition = averagePos;
+                }
+
+                Debug.DrawRay(averagePos, -fakeForward);
+
+                // if (lastPathPosition != dest)
+                //     lastPathPosition = dest;
+
+                //   lastDir = (averagePos - dest).normalized;
+
+                print(fakeForward);
+
+                RigidBody.MovePosition(Vector3.MoveTowards(RigidBody.position, dest, .5f));
+            }
+
+
+            //var lookAt = hit.collider.transform.forward;
+            //lookAt.y = 0;
+            //RigidBody.MoveRotation(Quaternion.Slerp(transform.rotation,
+            //    Quaternion.Euler(transform.rotation.eulerAngles.x, Quaternion.LookRotation(lookAt).eulerAngles.y, transform.rotation.eulerAngles.z),
+            //      Time.fixedDeltaTime * 100));
 
             IsGrounded = hit.distance < 1;
         }
