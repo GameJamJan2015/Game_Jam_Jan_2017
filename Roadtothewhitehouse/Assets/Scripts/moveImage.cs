@@ -20,27 +20,15 @@ public class moveImage : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-        this.oldrawimagepos = transform.localPosition;
-        this.oldrawimagescale = transform.localScale;
-        this.oldrawimagerotation = transform.localRotation;
+        this.oldrawimagepos = rawimage.transform.position;
+        this.oldrawimagescale = rawimage.transform.localScale;
+        this.oldrawimagerotation = rawimage.transform.rotation;
 
-
-        activated = true;
         rawimagescale = Vector3.one * 2;//rawimage.transform.localScale;
     }
 	
 	// Update is called once per frame
 	void Update () {
-
-        //Debug options
-        //if (Input.GetKeyUp(KeyCode.W) && activated)
-        //{
-        //    activated = false;
-        //}
-        //if (Input.GetKeyUp(KeyCode.Q) && !activated)
-        //{
-        //    activated = true;
-        //}
 
         if (activated)
         {
@@ -48,16 +36,9 @@ public class moveImage : MonoBehaviour {
 
             rawimage.transform.localScale = new Vector3(rawimagescale.x + Mathf.Sin(time * speed) * amount, rawimagescale.y + Mathf.Sin(time * speed) * amount, rawimagescale.z);
 
-            rawimage.transform.position = Vector3.Lerp(rawimage.transform.position, new Vector3(Screen.width / 2f, Screen.height / 2f, 0), Time.deltaTime * 0.5f);
+            rawimage.transform.position = Vector3.Lerp(rawimage.transform.position, new Vector3(Screen.width / 2f, Screen.height / 2f, 0), Time.deltaTime * 0.7f);
             rawimage.transform.rotation = Quaternion.Slerp(rawimage.transform.rotation, Quaternion.identity, Time.deltaTime);
         }
-
-        if (!activated)
-        {
-            rawimage.transform.localScale = oldrawimagescale;
-            rawimage.transform.localPosition = oldrawimagepos;
-            rawimage.transform.localRotation = oldrawimagerotation;
-        }       
     }
 
     /// <summary>
@@ -65,7 +46,12 @@ public class moveImage : MonoBehaviour {
     /// </summary>
     public void activate()
     {
-        Start();
+        rawimage.transform.localScale = oldrawimagescale;
+        rawimage.transform.position = oldrawimagepos;
+        rawimage.transform.rotation = oldrawimagerotation;
+
+        activated = true;
+        time = 0;
     }
 
     /// <summary>
