@@ -21,6 +21,11 @@ public class SplineDecorator : MonoBehaviour {
     List<int> newTriangles = new List<int>();
     List<Vector3> indexPostition = new List<Vector3>();
 
+    void Start()
+    {
+        GenerateCurve();
+    }
+
     public void RemoveAll()
     {
 
@@ -140,11 +145,14 @@ public class SplineDecorator : MonoBehaviour {
             newTriangles.Add(newVertices.Count - 2);
             newTriangles.Add(newVertices.Count - 6);
             newTriangles.Add(newVertices.Count - 1);
+
+            
         }
 
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             indexPostition.Add(currentPos);
         }
+
     }
 }

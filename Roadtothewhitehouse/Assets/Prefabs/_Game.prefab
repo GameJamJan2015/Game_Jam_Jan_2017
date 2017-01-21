@@ -75,6 +75,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4991990871055368}
   - component: {fileID: 114906264488673238}
+  - component: {fileID: 82351818871997426}
   m_Layer: 0
   m_Name: _GameManager
   m_TagString: Untagged
@@ -420,6 +421,86 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+--- !u!82 &82351818871997426
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1240332242712826}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 7891786ec7efc534397875972cf2600e, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!92 &92006855475961924
 Behaviour:
   m_ObjectHideFlags: 1
@@ -453,11 +534,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   source: {fileID: 82119297549600516}
   reactions: []
-  randomreactions: []
-  gamestartreactions: []
-  deathreactions: []
-  pickupPoints: []
-  highscorereactions: []
+  randomreactions:
+  - {fileID: 8300000, guid: b122731a1d9867d4ba9c6b128aab894c, type: 3}
+  - {fileID: 8300000, guid: 89b4387904005a343aa92f9461825442, type: 3}
+  - {fileID: 8300000, guid: 4d2bb537fc29e964587a39fccb8b733b, type: 3}
+  gamestartreactions:
+  - {fileID: 8300000, guid: be5b91245d1d5234ab578e9c0c385f84, type: 3}
+  - {fileID: 8300000, guid: fff9f5404bbccad4596e8f64b834b2f0, type: 3}
+  - {fileID: 8300000, guid: ff28c388ffb998c4b8addf4b65c29fc3, type: 3}
+  - {fileID: 8300000, guid: 7e0d51a6e622ecf4ab236173a37fa6e5, type: 3}
+  deathreactions:
+  - {fileID: 8300000, guid: 68d8246913955054c8d131abf18c0e24, type: 3}
+  pickupPoints:
+  - {fileID: 8300000, guid: cfa49399efc8f954780d9ebec5959893, type: 3}
+  - {fileID: 8300000, guid: 8b599fec4ef4b8f46a14c1c89082122a, type: 3}
+  - {fileID: 8300000, guid: 5a39a5cb124a71345a8b5ff8f61ac667, type: 3}
+  - {fileID: 8300000, guid: 44825e6628b2475429e5eea1c6978aa9, type: 3}
+  - {fileID: 8300000, guid: afd4433ceeba45044ae2800568969424, type: 3}
+  - {fileID: 8300000, guid: 0ddbfa4b0b254ce4f9aca589517729ef, type: 3}
+  highscorereactions:
+  - {fileID: 8300000, guid: 5a39a5cb124a71345a8b5ff8f61ac667, type: 3}
+  - {fileID: 8300000, guid: 0ddbfa4b0b254ce4f9aca589517729ef, type: 3}
+  - {fileID: 8300000, guid: ff28c388ffb998c4b8addf4b65c29fc3, type: 3}
 --- !u!114 &114369232544322280
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -553,6 +651,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7114c72d5e3436e4780507836affc953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  VO: {fileID: 114256438873388188}
   TitleUI: {fileID: 223534316518704862}
   Player: {fileID: 114209437518634882}
 --- !u!124 &124374567852381892
@@ -633,6 +732,6 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -119}
-  m_SizeDelta: {x: 333.31, y: 43.9}
+  m_AnchoredPosition: {x: 0, y: -154.8}
+  m_SizeDelta: {x: 437.08, y: 43.9}
   m_Pivot: {x: 0.5, y: 0.5}
