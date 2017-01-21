@@ -74,6 +74,7 @@ public class TrumpManager : MonoBehaviour
     public void AddMoney(int money)
     {
         this.Money += money;
+        StartCoroutine(MoneyAnim(money));
     }
 
     private void UpdateMoney()
@@ -81,6 +82,17 @@ public class TrumpManager : MonoBehaviour
         Money += (int)(Time.deltaTime * 100);
 
         UI.GetComponentInChildren<Text>().text = "$" + Money;
+    }
+
+    IEnumerator MoneyAnim(int money)
+    {
+        var tx = UI.transform.GetChild(1).GetComponent<Text>();
+
+        tx.enabled = true;
+        tx.text = "+ $" + money;
+        yield return new WaitForSeconds(4);
+
+        tx.enabled = false;
     }
 
     public void OnDeath()
