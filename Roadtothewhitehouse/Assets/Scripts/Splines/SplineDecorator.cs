@@ -11,42 +11,89 @@ public class SplineDecorator : MonoBehaviour {
 
     private float currentStep;
 
-    private List<Transform> objectList = new List<Transform>();
+    private bool start = true;
 
+    Mesh mesh;
+
+    List<Vector3> newVertices = new List<Vector3>();
+    List<Vector2> newUV = new List<Vector2>();
+    List<int> newTriangles = new List<int>();
 
     public void RemoveAll()
     {
-        int amount = transform.childCount;
-        for (int i = 0; i < amount; i++)
-        {
-            if(transform.GetChild(0) != null)
-                DestroyImmediate(transform.GetChild(0).gameObject);
-        }
-        objectList.Clear();
+
+        mesh = GetComponent<MeshFilter>().sharedMesh;
+
+        newVertices.Clear();
+        newTriangles.Clear();
+        newUV.Clear();
+
+        mesh.vertices = newVertices.ToArray();
+        mesh.uv = newUV.ToArray();
+        mesh.triangles = newTriangles.ToArray();
+
+        start = true;
+
+        //objectList.Clear();
     }
 
 	public void GenerateCurve () {
 		if (splineObject == null) {
 			return;
 		}
+        mesh = GetComponent<MeshFilter>().sharedMesh;
+        mesh.Clear();
 
         float stepSize = 0.0005f;
         currentStep = 0;
         while (currentStep < 1f)
         {
             currentStep += stepSize;
-            if (objectList.Count > 0)
+            if (!start)
             {
-                if (Vector3.Distance(objectList[objectList.Count - 1].position, spline.GetPoint(currentStep)) < distance)
+                Vector3 cross = Vector3.Cross(spline.GetDirection(currentStep), Vector3.up).normalized;
+                if (Vector3.Distance(newVertices[newVertices.Count - 1], spline.GetPoint(currentStep) + (cross * -2f)) < distance)
                     continue;
             }
+            else
+            {
+                createTriangle(true, spline.GetPoint(currentStep), spline.GetDirection(currentStep));
+                start = false;
+                continue;
+            }
 
-            Transform item = Instantiate(splineObject) as Transform;
             Vector3 position = spline.GetPoint(currentStep);
-            item.transform.localPosition = position;
-            item.transform.LookAt(position + spline.GetDirection(currentStep));
-            item.transform.parent = transform;
-            objectList.Add(item);
+            Vector3 direction = spline.GetDirection(currentStep);
+            createTriangle(false, position, direction);
+        }
+
+        mesh.vertices = newVertices.ToArray();
+        mesh.uv = newUV.ToArray();
+        mesh.triangles = newTriangles.ToArray();
+
+        GetComponent<MeshCollider>().sharedMesh = mesh;
+    }
+
+    private void createTriangle(bool first, Vector3 currentPos, Vector3 direction)
+    {
+        Vector3 cross = Vector3.Cross(direction, Vector3.up).normalized;
+        if(first)
+        {
+            newVertices.Add(currentPos + (cross * 2f));
+            newVertices.Add(currentPos + (cross * -2f));
+        }
+        else
+        {
+            newVertices.Add(currentPos + (cross * 2f));
+            newVertices.Add(currentPos + (cross * -2f));
+
+            newTriangles.Add(newVertices.Count - 1);
+            newTriangles.Add(newVertices.Count - 3);
+            newTriangles.Add(newVertices.Count - 4);
+
+            newTriangles.Add(newVertices.Count - 2);
+            newTriangles.Add(newVertices.Count - 1);
+            newTriangles.Add(newVertices.Count - 4);
         }
     }
 }
