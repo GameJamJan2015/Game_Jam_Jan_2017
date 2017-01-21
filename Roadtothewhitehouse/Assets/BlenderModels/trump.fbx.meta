@@ -16,6 +16,13 @@ ModelImporter:
     100016: Cube.001
     100018: Cube.002
     100020: Cube.003
+    100022: Armature
+    100024: Bone
+    100026: Bone.001
+    100028: Bone.002
+    100030: Bone.002_end
+    100032: Bone.003
+    100034: Bone.003_end
     400000: Camera
     400002: Cube
     400004: Plane
@@ -27,6 +34,13 @@ ModelImporter:
     400016: Cube.001
     400018: Cube.002
     400020: Cube.003
+    400022: Armature
+    400024: Bone
+    400026: Bone.001
+    400028: Bone.002
+    400030: Bone.002_end
+    400032: Bone.003
+    400034: Bone.003_end
     2300000: Cube
     2300002: Plane
     2300004: Plane.001
