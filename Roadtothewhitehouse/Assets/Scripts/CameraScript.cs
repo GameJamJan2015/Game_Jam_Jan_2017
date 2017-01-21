@@ -13,6 +13,9 @@ public class CameraScript : MonoBehaviour
     [SerializeField]
     private Transform TitleTransform;
 
+    [SerializeField]
+    private Transform centerTrump;
+
     // Use this for initialization
     void Start()
     {
@@ -23,13 +26,13 @@ public class CameraScript : MonoBehaviour
     {
         if (Manager.State == TrumpManager.GameState.GAME)
         {
-            float zoom = Mathf.Max( 9, Player.RigidBody.velocity.magnitude);
+            float zoom = Mathf.Max(10, Player.RigidBody.velocity.magnitude);
 
             transform.rotation = Quaternion.Slerp(transform.rotation,
-                Quaternion.LookRotation(Player.transform.position - transform.position) , Time.deltaTime * 4);
+                Quaternion.LookRotation(centerTrump.position - transform.position) , Time.deltaTime * 4);
 
             transform.position = Vector3.Lerp(transform.position, 
-                Player.transform.position + Player.transform.right * zoom , Time.deltaTime * 13);
+                (zoom * (Player.transform.position - centerTrump.position).normalized) + Player.transform.position, Time.deltaTime * 13);
         }
         else if (Manager.State == TrumpManager.GameState.MENU)
         {

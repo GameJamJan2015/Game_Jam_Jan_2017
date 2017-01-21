@@ -3017,6 +3017,7 @@ GameObject:
   - component: {fileID: 404907946}
   - component: {fileID: 404907945}
   - component: {fileID: 404907944}
+  - component: {fileID: 404907948}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -3087,6 +3088,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: -9.943001, z: 0}
+--- !u!114 &404907948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 404907943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c74dc426bf43e5b478f4273858af6c69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &953597559
 Mesh:
   m_ObjectHideFlags: 0
@@ -3885,11 +3897,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4637260535293486, guid: 7417aca89807cf54eb93dfeeac53ea22, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 4.6
+      value: 4.75
       objectReference: {fileID: 0}
     - target: {fileID: 4637260535293486, guid: 7417aca89807cf54eb93dfeeac53ea22, type: 2}
       propertyPath: m_LocalPosition.z
-      value: -197.64
+      value: -199.38
       objectReference: {fileID: 0}
     - target: {fileID: 4654136695831176, guid: 7417aca89807cf54eb93dfeeac53ea22, type: 2}
       propertyPath: m_LocalPosition.x
@@ -3905,7 +3917,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4637260535293486, guid: 7417aca89807cf54eb93dfeeac53ea22, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -0.31
+      value: 0.33
       objectReference: {fileID: 0}
     - target: {fileID: 4637260535293486, guid: 7417aca89807cf54eb93dfeeac53ea22, type: 2}
       propertyPath: m_LocalRotation.y
@@ -3919,6 +3931,39 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 85.178
       objectReference: {fileID: 0}
+    - target: {fileID: 114627500131457866, guid: 7417aca89807cf54eb93dfeeac53ea22,
+        type: 2}
+      propertyPath: centerTrump
+      value: 
+      objectReference: {fileID: 2125420259}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7417aca89807cf54eb93dfeeac53ea22, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &2125420258
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 2125420259}
+  m_Layer: 0
+  m_Name: TrumpCenter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2125420259
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2125420258}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.5, y: -1.4466256, z: -105.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
