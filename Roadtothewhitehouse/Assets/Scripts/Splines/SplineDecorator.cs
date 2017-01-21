@@ -51,7 +51,7 @@ public class SplineDecorator : MonoBehaviour {
         {
             currentStep += stepSize;
             Vector3 position = spline.GetPoint(currentStep);
-            Vector3 direction = spline.GetDirection(currentStep);
+            Vector3 direction = /*position - spline.GetPoint(currentStep - stepSize).normalized;*/spline.GetDirection(currentStep);
             if (!start)
             {
                 Vector3 cross = Vector3.Cross(spline.GetDirection(currentStep), Vector3.up).normalized;
