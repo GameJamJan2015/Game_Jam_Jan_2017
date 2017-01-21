@@ -14,6 +14,9 @@ public class TrumpManager : MonoBehaviour
     public GameState State { get; set; }
 
     [SerializeField]
+    private VoiceManager VO;
+
+    [SerializeField]
     private Canvas TitleUI;
 
     [SerializeField]
@@ -35,6 +38,7 @@ public class TrumpManager : MonoBehaviour
                 this.State = GameState.GAME;
                 this.TitleUI.enabled = false;
                 Player.Spawn();
+                VO.GameStartReaction();
             }
         }
         else if (State == GameState.GAME)
