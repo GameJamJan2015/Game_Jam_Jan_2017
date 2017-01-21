@@ -37,7 +37,6 @@ public class PlayerScript : MonoBehaviour
         this.MinSpeed = 1.3f;
 
         lastPathPosition = SpawnTransform.position;
-        lastDir = Vector3.forward;
     }
 
     // Update is called once per frame
@@ -106,7 +105,6 @@ public class PlayerScript : MonoBehaviour
 
     private Vector3 currentPathPosition;
     private Vector3 lastPathPosition;
-    private Vector3 lastDir;
     private void UpdatePathFinding()
     {
         // Keep around head
@@ -153,7 +151,7 @@ public class PlayerScript : MonoBehaviour
                     Vector3 p1 = vertices[triangles[hit.triangleIndex * 3 + 1]];
                     Vector3 p2 = vertices[triangles[hit.triangleIndex * 3 + 2]];
 
-
+                    
                     //TriangleShit[] lol = new TriangleShit[] { new TriangleShit() { dir = p0 - p1, pos1 = p0, pos2 = p1 }
                     //, new TriangleShit() { dir = p2 - p0, pos1 = p2, pos2 = p0 },
                     //    new TriangleShit() { dir = p2 - p1, pos1 = p2, pos2 = p1 } };
@@ -161,7 +159,7 @@ public class PlayerScript : MonoBehaviour
                     //var test = lol.OrderBy(x => x.dir.magnitude).ToArray()[1];
 
 
-                    var averagePos =  (p0 + p1 + p2) / 3f;
+                    var averagePos =  decorator.GetCenterFromVertexIndex(triangles[hit.triangleIndex * 3 + 0]);
 
                     var fakeForward = (averagePos - lastPathPosition).normalized;
                     fakeForward.y = 0;
@@ -189,7 +187,7 @@ public class PlayerScript : MonoBehaviour
 
                     print(averagePos);
 
-                    RigidBody.MovePosition(Vector3.MoveTowards(RigidBody.position, dest, .5f));
+                   // RigidBody.MovePosition(Vector3.MoveTowards(RigidBody.position, dest, .5f));
                 }
             }
 
