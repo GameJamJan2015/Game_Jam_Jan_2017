@@ -38,13 +38,18 @@ public class PlayerScript : MonoBehaviour
         this.RigidBody.angularVelocity = Vector3.zero;
         this.MinSpeed = 0.5f;
 
-        lastPathPosition = SpawnTransform.position - transform.forward * 2;
+        lastPathPosition = SpawnTransform.position - transform.forward * 1;
+        currentDir = transform.forward;
     }
 
     // Update is called once per frame
     void Update()
     {
-        UpdateSpeed();
+        if (!IsDead)
+        {
+            UpdateJump();
+            UpdateSpeed();
+        }
     }
 
     void FixedUpdate()
@@ -52,7 +57,6 @@ public class PlayerScript : MonoBehaviour
         if (!IsDead)
         {
             UpdatePathFinding();
-            UpdateJump();
             UpdateMovemet();
         }
     }
@@ -83,22 +87,25 @@ public class PlayerScript : MonoBehaviour
             Kill();
         }
 
-        if (!IsGrounded)
+        if (!IsGrounded && 1 == 0)
         {
             if (Input.GetButton("RotateLeft"))
             {
                 //Quaternion deltaRotation = Quaternion.Euler(new Vector3(-180, 0, 0));
                 // RigidBody.AddRelativeTorque(new Vector3(-10000, 0, 0), ForceMode.VelocityChange);
                 //RigidBody.MoveRotation(Quaternion.Slerp(RigidBody.rotation, RigidBody.rotation * deltaRotation, Time.deltaTime * 270));
-                transform.Rotate(-10, 0, 0, Space.Self);
+                //  transform.Rotate(-10, 0, 0, Space.Self);
+
             }
             else if (Input.GetButton("RotateRight"))
             {
-                transform.Rotate(10, 0, 0, Space.Self);
+                //transform.Rotate(10, 0, 0, Space.Self);
+
+                //transform.rotation *= Quaternion.Euler(new Vector3(10, 0, 0)); 
                 // Quaternion deltaRotation = Quaternion.Euler(new Vector3(180, 0, 0));
                 // RigidBody.MoveRotation(Quaternion.Slerp(RigidBody.rotation, RigidBody.rotation * deltaRotation, Time.deltaTime * 270));
                 //
-                //RigidBody.AddRelativeTorque(new Vector3(10000, 0, 0), ForceMode.VelocityChange);
+                RigidBody.AddRelativeTorque(new Vector3(5000, 0, 0), ForceMode.Impulse);
             }
             else if (Input.GetButton("Dash"))
             {
@@ -106,16 +113,16 @@ public class PlayerScript : MonoBehaviour
             }
 
 
-            var lookAt = RigidBody.velocity;
+            var lookAt = currentDir;
             lookAt.y = 0;
-            var newY = Quaternion.LookRotation(currentDir).eulerAngles.y;
-            transform.rotation = Quaternion.Slerp(transform.localRotation,
-                Quaternion.Euler(transform.rotation.eulerAngles.x, newY, transform.rotation.eulerAngles.z), Time.deltaTime * 10);
+            var newY = Quaternion.LookRotation(lookAt).eulerAngles.y;
+            RigidBody.MoveRotation(Quaternion.Slerp(transform.rotation,
+                  Quaternion.Euler(RigidBody.rotation.eulerAngles.x, newY, RigidBody.rotation.eulerAngles.z), Time.deltaTime * 100));
         }
         else
         {
             transform.rotation = Quaternion.Slerp(transform.rotation,
-                        Quaternion.LookRotation(currentDir), Time.deltaTime * 1);
+                        Quaternion.LookRotation(currentDir), Time.deltaTime * 10);
         }
 
         //print(IsGrounded);
@@ -123,7 +130,7 @@ public class PlayerScript : MonoBehaviour
 
     private void UpdateJump()
     {
-        if (IsGrounded && Input.GetButtonUp("Jump"))
+        if (IsGrounded && Input.GetButtonDown("Jump"))
         {
             RigidBody.AddForce(transform.up * 8000);
         }
@@ -176,21 +183,27 @@ public class PlayerScript : MonoBehaviour
                     var averagePos = decorator.GetCenterFromVertexIndex(triangles[hit.triangleIndex * 3 + 0]);
 
                     var fakeForward = (averagePos - lastPathPosition).normalized;
-                    fakeForward.y = 0;
+                  
+                    if ( Vector3.Dot(currentDir, (fakeForward)) < 0)
+                    {
+                        fakeForward = -fakeForward;
+                    }
 
-                    var fakePos = transform.position;
-                    fakePos.y = 0;
+                    Debug.DrawRay(averagePos, fakeForward);
 
-                    var dest = DistanceToLine(averagePos, fakeForward, fakePos);
-                    dest.y = transform.position.y;
-
-
-                    if (currentPathPosition != averagePos)
+                    if (currentPathPosition != averagePos && fakeForward != Vector3.zero)
                     {
                         lastPathPosition = currentPathPosition;
                         currentPathPosition = averagePos;
                         currentDir = fakeForward;
                     }
+                    fakeForward.y = 0;
+
+                    var fakePos = transform.position;
+                    fakePos.y = 0;
+
+                    var dest = DistanceToLine(averagePos, fakeForward.normalized, fakePos);
+                    dest.y = transform.position.y;
 
                     RigidBody.MovePosition(Vector3.MoveTowards(RigidBody.position, dest, 1f));
                 }
@@ -202,6 +215,7 @@ public class PlayerScript : MonoBehaviour
             IsGrounded = false;
         }
 
+
         // Force
         var addVel = transform.forward;
         addVel.y = 0;
@@ -212,7 +226,10 @@ public class PlayerScript : MonoBehaviour
     {
         if (collision.contacts[0].thisCollider.GetType() == typeof(BoxCollider))
         {
-            Kill();
+            if (collision.collider.tag != "GameObject")
+            {
+                Kill();
+            }
         }
     }
 
