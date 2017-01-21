@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Roadtothewhitehouse/Assets/BlenderModels/skydome.blend.meta
 guid: f3f9045b197a1aa449334978eb6fa165
 timeCreated: 1485027277
+=======
+guid: e9e019c4d72f13b4899f18879766e670
+timeCreated: 1485027298
+>>>>>>> 3b73c3f75612e836136e19bedc94ab35ac4f8d17:Roadtothewhitehouse/Assets/BlenderModels/skydome.blend.meta
 licenseType: Free
 ModelImporter:
   serializedVersion: 19

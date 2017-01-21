@@ -26,7 +26,7 @@ public class CameraScript : MonoBehaviour
     {
         if (Manager.State == TrumpManager.GameState.GAME)
         {
-            float zoom = Mathf.Max(10, Player.RigidBody.velocity.magnitude);
+            float zoom = Mathf.Max(10, Player.RigidBody.velocity.magnitude * 0.5f);
 
             transform.rotation = Quaternion.Slerp(transform.rotation,
                 Quaternion.LookRotation(centerTrump.position - transform.position) , Time.deltaTime * 4);
