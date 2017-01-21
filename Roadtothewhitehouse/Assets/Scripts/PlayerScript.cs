@@ -96,18 +96,19 @@ public class PlayerScript : MonoBehaviour
                 //Quaternion deltaRotation = Quaternion.Euler(new Vector3(-180, 0, 0));
                 // RigidBody.AddRelativeTorque(new Vector3(-10000, 0, 0), ForceMode.VelocityChange);
                 //RigidBody.MoveRotation(Quaternion.Slerp(RigidBody.rotation, RigidBody.rotation * deltaRotation, Time.deltaTime * 270));
-                transform.Rotate(-10, 0, 0, Space.Self);
+                //transform.Rotate(-10, 0, 0, Space.Self);
+                transform.GetChild(0).transform.Rotate(0, 10, 0, Space.Self);
                 //RigidBody.AddRelativeTorque(new Vector3(-5000, 0, 0), ForceMode.VelocityChange);
             }
             else if (Input.GetButton("RotateRight"))
             {
-              //  transform.Rotate(10, 0, 0, Space.Self);
+                //  transform.Rotate(10, 0, 0, Space.Self);
 
-                transform.rotation *= Quaternion.Euler(new Vector3(10, 0, 0)); 
+                transform.GetChild(0).transform.Rotate(0, -10, 0, Space.Self);
                 // Quaternion deltaRotation = Quaternion.Euler(new Vector3(180, 0, 0));
                 // RigidBody.MoveRotation(Quaternion.Slerp(RigidBody.rotation, RigidBody.rotation * deltaRotation, Time.deltaTime * 270));
                 //
-              //  RigidBody.AddRelativeTorque(new Vector3(5000, 0, 0), ForceMode.VelocityChange);
+                //  RigidBody.AddRelativeTorque(new Vector3(5000, 0, 0), ForceMode.VelocityChange);
             }
             else if (Input.GetButton("Dash"))
             {
@@ -206,10 +207,6 @@ public class PlayerScript : MonoBehaviour
                     fakeForward = currentDir;
                     fakeForward.y = 0;
 
-
-
-
-
                     var fakePos = transform.position;
                     fakePos.y = averagePos.y;
 
@@ -231,7 +228,6 @@ public class PlayerScript : MonoBehaviour
         {
             IsGrounded = false;
         }
-
 
         // Force
         var addVel = transform.forward;
