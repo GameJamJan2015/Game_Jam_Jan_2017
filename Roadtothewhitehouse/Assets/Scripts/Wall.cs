@@ -9,7 +9,7 @@ public class Wall : MonoBehaviour {
         PlayerScript player = collision.gameObject.GetComponent<PlayerScript>();
         if (player != null)
         {
-            Debug.Log("KILL");
+            player.Kill();
         }
 
     }
