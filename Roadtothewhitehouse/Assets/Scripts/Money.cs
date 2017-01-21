@@ -5,6 +5,7 @@ using UnityEngine;
 public class Money : MonoBehaviour {
 
     TrumpManager tm;
+    BoxCollider bc;
     Vector3 startPos;
     float time;
     float respawn = 0;
@@ -16,6 +17,7 @@ public class Money : MonoBehaviour {
     void Start () {
         tm = FindObjectOfType<TrumpManager>();
         mr = GetComponentInChildren<MeshRenderer>();
+        bc = GetComponent<BoxCollider>();
         startPos = transform.position;
 
     }
@@ -23,7 +25,8 @@ public class Money : MonoBehaviour {
     void OnCollisionEnter(Collision collision)
     {
         mr.enabled = false;
-
+        bc.enabled = false;
+        tm.AddMoney(7000);
     }
 
     void Update () {
@@ -34,6 +37,7 @@ public class Money : MonoBehaviour {
             {
                 respawn = 0;
                 mr.enabled = true;
+                bc.enabled = true;
             }
         }
 
