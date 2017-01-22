@@ -4,7 +4,27 @@ timeCreated: 1484990089
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    100000: Armature
+    100002: Bone
+    100004: Bone_001
+    100006: Bone_002
+    100008: Bone_003
+    100010: Cube
+    100012: //RootNode
+    400000: Armature
+    400002: Bone
+    400004: Bone_001
+    400006: Bone_002
+    400008: Bone_003
+    400010: Cube
+    400012: //RootNode
+    4300000: Cube
+    7400000: Default Take
+    7400002: ArmatureAction_000
+    7400004: ArmatureAction_003
+    9500000: //RootNode
+    13700000: Cube
   materials:
     importMaterials: 1
     materialName: 0
