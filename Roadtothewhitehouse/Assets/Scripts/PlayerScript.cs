@@ -36,7 +36,7 @@ public class PlayerScript : MonoBehaviour
         this.transform.rotation = SpawnTransform.rotation;
         this.RigidBody.velocity = Vector3.zero;
         this.RigidBody.angularVelocity = Vector3.zero;
-        this.MinSpeed = 0.1f;
+        this.MinSpeed = 0.08f;
 
         lastPathPosition = SpawnTransform.position - transform.forward * 1 - transform.up * 2;
         currentPathPosition = lastPathPosition;
@@ -44,7 +44,7 @@ public class PlayerScript : MonoBehaviour
 
         transform.GetChild(0).rotation = Quaternion.identity;
 
-        RigidBody.velocity = currentDir * 2;
+        RigidBody.velocity = currentDir * 4;
     }
 
     // Update is called once per frame
@@ -68,7 +68,7 @@ public class PlayerScript : MonoBehaviour
 
     private void UpdateSpeed()
     {
-        MinSpeed += Time.deltaTime * 0.005f;
+        MinSpeed += Time.deltaTime * 0.004f;
 
         var localVel = transform.InverseTransformDirection(RigidBody.velocity);
         if (localVel.magnitude < 1)
@@ -115,7 +115,7 @@ public class PlayerScript : MonoBehaviour
             }
             else if (Input.GetButton("Dash"))
             {
-                RigidBody.AddForce(Vector3.up * -80 * Time.deltaTime, ForceMode.Impulse);
+                RigidBody.AddForce(Vector3.up * -45 * Time.deltaTime, ForceMode.Impulse);
             }
 
            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(transform.eulerAngles.x,
@@ -194,7 +194,7 @@ public class PlayerScript : MonoBehaviour
         //}
 
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, dir, out hit, length))
+        if (Physics.Raycast(transform.position, dir, out hit, length, 4))
         {
             MeshCollider meshCollider = hit.collider as MeshCollider;
             if (meshCollider != null && meshCollider.sharedMesh != null)
