@@ -194,7 +194,7 @@ public class PlayerScript : MonoBehaviour
         //}
 
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, dir, out hit, length, 4))
+        if (Physics.Raycast(transform.position, dir, out hit, length))
         {
             MeshCollider meshCollider = hit.collider as MeshCollider;
             if (meshCollider != null && meshCollider.sharedMesh != null)
