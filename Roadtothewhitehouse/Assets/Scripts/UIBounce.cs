@@ -16,9 +16,14 @@ public class UIBounce : MonoBehaviour {
         rawimage = GetComponent<Text>();
         rawimagescale = rawimage.transform.localScale;
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    void OnEnable()
+    {
+        time = 0;
+    }
+
+    // Update is called once per frame
+    void Update () {
         time += Time.deltaTime;
 
         rawimage.transform.localScale = new Vector3(rawimagescale.x + Mathf.Sin(time * speed) * amount, rawimagescale.y + Mathf.Sin(time * speed) * amount, rawimagescale.z);

@@ -89,7 +89,8 @@ public class TrumpManager : MonoBehaviour
 
     private void UpdateMoney()
     {
-        Money += (int)(Time.deltaTime * 100);
+        if (Player.RigidBody.velocity.magnitude > 1)
+            Money += (int)(Time.deltaTime * 100);
 
         UI.GetComponentInChildren<Text>().text = "$" + Money;
     }
