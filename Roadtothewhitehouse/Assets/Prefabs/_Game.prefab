@@ -959,7 +959,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1705557893369512}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0, y: 0, z: -98.2}
   m_LocalScale: {x: 50000.03, y: 50000, z: 50000.03}
   m_Children: []
   m_Father: {fileID: 4026102234851144}
@@ -1080,13 +1080,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1744458411911350}
-  m_LocalRotation: {x: -0, y: 0.06364256, z: -0, w: 0.9979728}
-  m_LocalPosition: {x: -14.806, y: 5.27, z: -197.986}
+  m_LocalRotation: {x: -0, y: -0.6589758, z: -0, w: 0.7521642}
+  m_LocalPosition: {x: -13.22, y: 6.91, z: -198.44}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4026102234851144}
   m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 7.2980003, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -82.444, z: 0}
 --- !u!4 &4639069784289666
 Transform:
   m_ObjectHideFlags: 1
@@ -1795,7 +1795,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!54 &54725476495507500
 Rigidbody:
   m_ObjectHideFlags: 1

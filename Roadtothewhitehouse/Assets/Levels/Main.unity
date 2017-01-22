@@ -5412,6 +5412,16 @@ Prefab:
       propertyPath: m_LocalPosition.z
       value: -98.2
       objectReference: {fileID: 0}
+    - target: {fileID: 54039860359166440, guid: 7417aca89807cf54eb93dfeeac53ea22,
+        type: 2}
+      propertyPath: m_Interpolate
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 54039860359166440, guid: 7417aca89807cf54eb93dfeeac53ea22,
+        type: 2}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7417aca89807cf54eb93dfeeac53ea22, type: 2}
   m_IsPrefabParent: 0

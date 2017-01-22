@@ -119,7 +119,7 @@ public class PlayerScript : MonoBehaviour
             }
 
            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(transform.eulerAngles.x,
-                Quaternion.LookRotation(currentDir).eulerAngles.y, Quaternion.LookRotation(currentDir).eulerAngles.z), Time.fixedDeltaTime * 6);
+                Quaternion.LookRotation(currentDir).eulerAngles.y, Quaternion.LookRotation(currentDir).eulerAngles.z), Time.fixedDeltaTime * 8);
 
             //var lookAt = currentDir;
             //lookAt.y = 0;
@@ -140,7 +140,7 @@ public class PlayerScript : MonoBehaviour
            //  Quaternion.LookRotation(currentDir).eulerAngles.y, transform.eulerAngles.z);
 
             transform.GetChild(0).localRotation = Quaternion.Slerp(transform.GetChild(0).localRotation,
-                Quaternion.identity, Time.fixedDeltaTime * 3);
+                Quaternion.identity, Time.fixedDeltaTime * 4);
 
         }
 
@@ -156,7 +156,8 @@ public class PlayerScript : MonoBehaviour
     {
         if (IsGrounded && Input.GetButtonDown("Jump"))
         {
-            RigidBody.AddForce(Vector3.up * 500);
+            RigidBody.AddForce(Vector3.up * 600);
+            IsGrounded = false;
         }
     }
 
@@ -165,10 +166,6 @@ public class PlayerScript : MonoBehaviour
     private Vector3 currentDir;
     private void UpdatePathFinding()
     {
-        // Keep around head
-        Vector3 dir = Vector3.down;
-        float length = 1000;
-
         //RaycastHit hit;
         //if (Physics.Raycast(transform.position, dir, out hit, length))
         //{
@@ -193,8 +190,12 @@ public class PlayerScript : MonoBehaviour
         //    IsGrounded = hit.distance < 1;
         //}
 
+        // Keep around head
+        Vector3 dir = Vector3.down;
+        float length = 100;
+
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, dir, out hit, length, 4))
+        if (Physics.Raycast(transform.position, dir, out hit, length))
         {
             MeshCollider meshCollider = hit.collider as MeshCollider;
             if (meshCollider != null && meshCollider.sharedMesh != null)
@@ -234,16 +235,18 @@ public class PlayerScript : MonoBehaviour
                     var dest = DistanceToLine(averagePos, fakeForward.normalized, fakePos);
                     dest.y = transform.position.y;
 
-                    //print(dest - transform.position);
 
-                    //var a = transform.InverseTransformPoint(new Vector3(dest.x, transform.position.y, dest.z));
-                    //a.z = 0;
-                    //RigidBody.MovePosition( Vector3.Lerp(RigidBody.position, transform.TransformPoint( a), Time.fixedDeltaTime * 10) );
+                    //RigidBody.MovePosition(new Vector3(dest.x, Mathf.Max( transform.position.y, dest.y), dest.z));
 
-                    RigidBody.MovePosition(new Vector3(dest.x, transform.position.y, dest.z));
+                    var t = transform.InverseTransformPoint(dest);
+                    t.y = 0;
+                    t.z = 0;
+                    t = transform.TransformPoint(t);
 
-                    //Debug.DrawLine(fakePos, fakePos + currentDir, Color.yellow);
-                    //  Debug.DrawRay(transform.position, (transform.position - dest).normalized * 4f, Color.red, 0f);
+                    RigidBody.MovePosition(t);
+
+                    // Debug.DrawLine(fakePos, fakePos + currentDir, Color.yellow);
+                    Debug.DrawLine(transform.position,  t, Color.red, 0f);
                     // transform.position = Vector3.MoveTowards(RigidBody.position, dest, 5f);
                 }
             }
@@ -256,9 +259,10 @@ public class PlayerScript : MonoBehaviour
         }
 
         //hit;
-        if (Physics.Raycast(transform.position, -Vector3.up, out hit, 1.25f))
+        if (Physics.Raycast(transform.position, -Vector3.up, out hit, 1.31f))
         {
-            IsGrounded = true;
+            if (hit.collider.name == "Spline")
+                IsGrounded = true;
         } else
         {
             IsGrounded = false;
@@ -286,7 +290,7 @@ public class PlayerScript : MonoBehaviour
 
     public Vector3 DistanceToLine(Vector3 origin, Vector3 dir, Vector3 point)
     {
-        return UnityEditor.HandleUtility.ProjectPointLine(point, origin - dir * 100, origin + dir * 100);
+        return UnityEditor.HandleUtility.ProjectPointLine(point, origin - (dir * 100), origin + (dir * 100));
     }
 
 }
