@@ -11,6 +11,7 @@ public class Money : MonoBehaviour {
     float respawn = 0;
 
     MeshRenderer mr;
+    ParticleSystem ps;
 
 
     // Use this for initialization
@@ -18,6 +19,7 @@ public class Money : MonoBehaviour {
         tm = FindObjectOfType<TrumpManager>();
         mr = GetComponentInChildren<MeshRenderer>();
         bc = GetComponent<BoxCollider>();
+        ps = GetComponent<ParticleSystem>();
         startPos = transform.position;
 
     }
@@ -27,6 +29,7 @@ public class Money : MonoBehaviour {
         mr.enabled = false;
         bc.enabled = false;
         tm.AddMoney(7000);
+        ps.Play();
     }
 
     void Update () {

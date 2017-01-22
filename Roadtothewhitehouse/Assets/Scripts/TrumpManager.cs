@@ -74,6 +74,10 @@ public class TrumpManager : MonoBehaviour
     public void AddMoney(int money)
     {
         this.Money += money;
+
+        VO.PointsReactions();
+
+        StopAllCoroutines();
         StartCoroutine(MoneyAnim(money));
     }
 
@@ -89,9 +93,11 @@ public class TrumpManager : MonoBehaviour
         var tx = UI.transform.GetChild(1).GetComponent<Text>();
 
         tx.enabled = true;
-        tx.text = "+ $" + money;
-        yield return new WaitForSeconds(4);
+        tx.text += "+ $" + money + "\n";
 
+        yield return new WaitForSeconds(1.5f);
+
+        tx.text = "";
         tx.enabled = false;
     }
 
@@ -102,8 +108,6 @@ public class TrumpManager : MonoBehaviour
             this.State = GameState.GAMEOVER;
             this.UI.enabled = false;
 
-            VO.DeathReactions();
-
             this.GameOverUI.enabled = true;
             this.GameOverUI.GetComponent<moveImage>().activate();
             this.GameOverUI.GetComponentInChildren<Text>().text = "$" + Money;
@@ -113,10 +117,17 @@ public class TrumpManager : MonoBehaviour
             {
                 PlayerPrefs.SetInt("score", Money);
                 PlayerPrefs.Save();
-                high = Money;
+                GameOverUI.transform.GetChild(2).GetComponent<Text>().text = "New Highscore: $" + Money;
+
+                VO.HighScoreReaction();
+            }
+            else
+            {
+                GameOverUI.transform.GetChild(2).GetComponent<Text>().text = "Highscore: $" + high;
+
+                VO.DeathReactions();
             }
 
-            GameOverUI.transform.GetChild(2).GetComponent<Text>().text = "Highscore: $" + high;
         }
     }
 }
