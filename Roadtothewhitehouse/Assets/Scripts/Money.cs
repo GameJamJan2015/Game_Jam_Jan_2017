@@ -46,6 +46,6 @@ public class Money : MonoBehaviour {
 
         time += Time.deltaTime;
         transform.rotation *= Quaternion.Euler(0f, 50f * Time.deltaTime, 0f);
-        transform.position = new Vector3(startPos.x, startPos.y * Mathf.Sin(time * 2) * 0.5f, startPos.z);
+        //transform.position = new Vector3(startPos.x, startPos.y * Mathf.Sin(time * 2) * 0.5f, startPos.z);
     }
 }
