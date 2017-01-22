@@ -29,6 +29,9 @@ public class TrumpManager : MonoBehaviour
     [SerializeField]
     private PlayerScript Player;
 
+    [SerializeField]
+    private ParticleSystem ps;
+
     private int Money;
 
     // Use this for initialization
@@ -79,6 +82,9 @@ public class TrumpManager : MonoBehaviour
 
         StopAllCoroutines();
         StartCoroutine(MoneyAnim(money));
+
+        ps.transform.position = Player.transform.position;
+        ps.Play();
     }
 
     private void UpdateMoney()

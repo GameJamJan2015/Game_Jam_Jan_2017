@@ -18,6 +18,8 @@ public class PlayerScript : MonoBehaviour
     [SerializeField]
     private Transform SpawnTransform;
 
+    private ParticleSystem ps;
+
     private float MinSpeed;
 
     // Use this for initialization
@@ -26,6 +28,8 @@ public class PlayerScript : MonoBehaviour
         this.RigidBody = GetComponent<Rigidbody>();
         this.RigidBody.isKinematic = true;
         this.IsDead = true;
+
+        ps = GetComponent<ParticleSystem>();
     }
 
     public void Spawn()
@@ -262,10 +266,14 @@ public class PlayerScript : MonoBehaviour
         if (Physics.Raycast(transform.position, -Vector3.up, out hit, 1.31f))
         {
             if (hit.collider.name == "Spline")
+            {
                 IsGrounded = true;
+                ps.Play();
+            }
         } else
         {
             IsGrounded = false;
+            ps.Stop();
         }
 
         // Force
