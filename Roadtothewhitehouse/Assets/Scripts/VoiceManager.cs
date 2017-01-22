@@ -13,12 +13,6 @@ public class VoiceManager : MonoBehaviour {
     public AudioClip[] pickupPoints;
     public AudioClip[] highscorereactions;
 
-    // Use this for initialization
-    void Start () {
-        
-
-		
-	}
 
     // Plays a random reaction when jumping over walls and such
     public void RandomReaction()
@@ -47,6 +41,9 @@ public class VoiceManager : MonoBehaviour {
     // Plays a random dollar pickup
     public void PointsReactions()
     {
+        if (source.isPlaying)
+            return;
+
         int randomIndex = Random.Range(0, pickupPoints.Length);
         source.clip = pickupPoints[randomIndex];
         source.Play();
