@@ -115,7 +115,7 @@ public class PlayerScript : MonoBehaviour
             }
             else if (Input.GetButton("Dash"))
             {
-                RigidBody.AddForce(Vector3.up * -80 * Time.deltaTime, ForceMode.Impulse);
+                RigidBody.AddForce(Vector3.up * -45 * Time.deltaTime, ForceMode.Impulse);
             }
 
            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(transform.eulerAngles.x,
@@ -194,7 +194,7 @@ public class PlayerScript : MonoBehaviour
         //}
 
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, dir, out hit, length))
+        if (Physics.Raycast(transform.position, dir, out hit, length, 4))
         {
             MeshCollider meshCollider = hit.collider as MeshCollider;
             if (meshCollider != null && meshCollider.sharedMesh != null)
