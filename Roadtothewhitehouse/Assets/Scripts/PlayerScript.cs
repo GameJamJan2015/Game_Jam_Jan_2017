@@ -82,6 +82,7 @@ public class PlayerScript : MonoBehaviour
         Manager.OnDeath();
     }
 
+    private float loopAngle = 0;
     private void UpdateMovemet()
     {
         if (transform.position.y < -60)
@@ -97,25 +98,27 @@ public class PlayerScript : MonoBehaviour
                 // RigidBody.AddRelativeTorque(new Vector3(-10000, 0, 0), ForceMode.VelocityChange);
                 //RigidBody.MoveRotation(Quaternion.Slerp(RigidBody.rotation, RigidBody.rotation * deltaRotation, Time.deltaTime * 270));
                 //transform.Rotate(-10, 0, 0, Space.Self);
-                transform.GetChild(0).transform.Rotate(0, 10, 0, Space.Self);
+                transform.GetChild(0).transform.Rotate(0, -10, 0, Space.Self);
+                loopAngle -= 10;
                 //RigidBody.AddRelativeTorque(new Vector3(-5000, 0, 0), ForceMode.VelocityChange);
             }
             else if (Input.GetButton("RotateRight"))
             {
-                //  transform.Rotate(10, 0, 0, Space.Self);
+                transform.GetChild(0).transform.Rotate(0, 10, 0, Space.Self);
+                loopAngle += 10;
 
-                transform.GetChild(0).transform.Rotate(0, -10, 0, Space.Self);
-                // Quaternion deltaRotation = Quaternion.Euler(new Vector3(180, 0, 0));
-                // RigidBody.MoveRotation(Quaternion.Slerp(RigidBody.rotation, RigidBody.rotation * deltaRotation, Time.deltaTime * 270));
+                // 
+                //  Quaternion deltaRotation = Quaternion.Euler(new Vector3(180, 0, 0));
+                // RigidBody.MoveRotation(Quaternion.Slerp(RigidBody.rotation, deltaRotation * RigidBody.rotation , Time.deltaTime * 2));
                 //
-                //  RigidBody.AddRelativeTorque(new Vector3(5000, 0, 0), ForceMode.VelocityChange);
+                //RigidBody.AddRelativeTorque(new Vector3(5000, 5000, 5000), ForceMode.Impulse);
             }
             else if (Input.GetButton("Dash"))
             {
-                RigidBody.AddForce(transform.up * -800 * Time.deltaTime, ForceMode.Impulse);
+                RigidBody.AddForce(Vector3.up * -80 * Time.deltaTime, ForceMode.Impulse);
             }
 
-
+            transform.rotation = Quaternion.Euler(transform.eulerAngles.x, Quaternion.LookRotation(currentDir).eulerAngles.y, Quaternion.LookRotation(currentDir).eulerAngles.z);
             //var lookAt = currentDir;
             //lookAt.y = 0;
             //var newY = Quaternion.LookRotation(lookAt).eulerAngles.y;
@@ -126,9 +129,20 @@ public class PlayerScript : MonoBehaviour
         {
             //transform.rotation = Quaternion.Slerp(transform.rotation,
             //            Quaternion.LookRotation(currentDir), Time.deltaTime * 20);
+            transform.rotation = Quaternion.Slerp(transform.rotation,
+         Quaternion.LookRotation(currentDir), 1f);
+
+            loopAngle = 0;
+
         }
-        transform.rotation = Quaternion.Slerp(transform.rotation,
-            Quaternion.LookRotation(currentDir), 1f);
+
+
+        if (Mathf.Abs(loopAngle) >= 360)
+        {
+            loopAngle = 0;
+            Manager.AddMoney(500);
+        }
+
 
         //print(IsGrounded);
     }
@@ -188,9 +202,9 @@ public class PlayerScript : MonoBehaviour
                     var averagePos = decorator.GetCenterFromVertexIndex(triangles[hit.triangleIndex * 3 + 0]);
 
                     var fakeForward = (averagePos - lastPathPosition).normalized;
-                   
 
-                    if ( Vector3.Dot(currentDir, (fakeForward)) < 0)
+
+                    if (Vector3.Dot(currentDir, (fakeForward)) < 0)
                     {
                         fakeForward = -fakeForward;
                     }
@@ -216,9 +230,8 @@ public class PlayerScript : MonoBehaviour
 
                     RigidBody.MovePosition(new Vector3(dest.x, transform.position.y, dest.z));
 
-                    Debug.Log(dest + " | " + transform.position);
                     Debug.DrawLine(fakePos, transform.position, Color.yellow);
-                  //  Debug.DrawRay(transform.position, (transform.position - dest).normalized * 4f, Color.red, 0f);
+                    //  Debug.DrawRay(transform.position, (transform.position - dest).normalized * 4f, Color.red, 0f);
                     // transform.position = Vector3.MoveTowards(RigidBody.position, dest, 5f);
                 }
             }
