@@ -28,7 +28,7 @@ public class Money : MonoBehaviour {
     {
         mr.enabled = false;
         bc.enabled = false;
-        tm.AddMoney(7000);
+        tm.AddMoney(5000);
         ps.Play();
     }
 
