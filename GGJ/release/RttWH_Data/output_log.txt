@@ -1,0 +1,35 @@
+Initialize engine version: 5.5.0f3 (38b4efef76f0)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce 840M            (ID=0x1341)
+    Vendor:   NVIDIA
+    VRAM:     1996 MB
+    Driver:   20.19.15.4549
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\Users\Simon\Desktop\RttWH_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\Simon\Desktop\RttWH_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\Simon\Desktop\RttWH_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\Simon\Desktop\RttWH_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\Simon\Desktop\RttWH_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\Simon\Desktop\RttWH_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Users\Simon\Desktop\RttWH_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading C:\Users\Simon\Desktop\RttWH_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: C:\Users\Simon\Desktop\RttWH_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll (this message is harmless)
+Loading C:\Users\Simon\Desktop\RttWH_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll into Unity Child Domain
+- Completed reload, in  0.026 seconds
+Platform assembly: C:\Users\Simon\Desktop\RttWH_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Users\Simon\Desktop\RttWH_Data\Managed\System.dll (this message is harmless)
+desktop: 3200x1800 60Hz; virtual: 3200x1800 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 3.113063 ms
+Setting up 1 worker threads for Enlighten.
+  Thread -> id: 53a0 -> priority: 1 
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 2.352364 ms
+
+Unloading 5 unused Assets to reduce memory usage. Loaded Objects now: 1037.
+Total: 0.495816 ms (FindLiveObjects: 0.037107 ms CreateObjectMapping: 0.025659 ms MarkObjects: 0.339886 ms  DeleteObjects: 0.092768 ms)
+
