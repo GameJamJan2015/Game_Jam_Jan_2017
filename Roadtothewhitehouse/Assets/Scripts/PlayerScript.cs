@@ -149,7 +149,7 @@ public class PlayerScript : MonoBehaviour
         }
 
 
-        if (Mathf.Abs(loopAngle) >= 360)
+        if (Mathf.Abs(loopAngle) >= 340)
         {
             loopAngle = 0;
             Manager.AddMoney(500);
@@ -247,7 +247,8 @@ public class PlayerScript : MonoBehaviour
                     t.z = 0;
                     t = transform.TransformPoint(t);
 
-                    RigidBody.MovePosition(t);
+                    // RigidBody.MovePosition(t);
+                    transform.position = t;
 
                     // Debug.DrawLine(fakePos, fakePos + currentDir, Color.yellow);
                     Debug.DrawLine(transform.position,  t, Color.red, 0f);
